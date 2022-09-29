@@ -15,4 +15,8 @@
     <!-- movie view -->
     <color name="movie_type_text_color">#8D8D8D</color>
 
+    <!-- home -->
+    <color name="home_view_background">#383838</color>
+    <color name="movie_type_button_unselected_background_color">#383838</color>
+
 </resources>
