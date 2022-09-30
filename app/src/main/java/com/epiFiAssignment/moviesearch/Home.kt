@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.epiFiAssignment.moviesearch.adapters.MovieAdapter
 import com.epiFiAssignment.moviesearch.models.SearchResult
+import com.epiFiAssignment.moviesearch.utils.Utils
 import com.epiFiAssignment.moviesearch.viewmodels.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
@@ -40,12 +41,13 @@ class Home : AppCompatActivity() {
     }
 
     private fun observeViewModels(){
-        movieViewModel.movieResultResponse.observe(this) { it ->
+        movieViewModel.movieSearchResponse.observe(this) { it ->
             it?.let { response ->
                 when (response.status) {
                     Status.SUCCESS -> handleSuccessState(response.data)
                     Status.ERROR -> handleErrorState()
                     Status.LOADING -> handleLoadingState()
+                    Status.NETWORK_ERROR -> handleNetworkError()
                 }
             }
         }
@@ -55,6 +57,7 @@ class Home : AppCompatActivity() {
     }
     private fun handleSuccessState(data: SearchResult?) {
 
+        Utils.toast(context = this , "success")
         if (data != null){
             if (data.result != null){
                 movieAdapter = MovieAdapter(data.result)
@@ -73,6 +76,11 @@ class Home : AppCompatActivity() {
     }
 
     private fun handleLoadingState(){
+        Utils.toast(context = this , "loading")
+    }
+
+    private fun handleNetworkError(){
+
     }
 
 

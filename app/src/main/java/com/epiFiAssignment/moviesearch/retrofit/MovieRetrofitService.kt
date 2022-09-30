@@ -2,7 +2,6 @@ package com.epiFiAssignment.moviesearch.retrofit
 
 import com.epiFiAssignment.moviesearch.BuildConfig
 import com.epiFiAssignment.moviesearch.Constants
-import com.epiFiAssignment.moviesearch.models.SearchResult
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,7 +9,6 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,7 +18,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-class MovieRetrofitClient @Inject constructor() {
+class MovieRetrofitService @Inject constructor() {
 
     @Singleton
     @Provides
@@ -73,21 +71,19 @@ class MovieRetrofitClient @Inject constructor() {
 
     @Singleton
     @Provides
-    fun getMoviesApiService() : MoviesApiService{
-
-        var retrofit : Retrofit = Retrofit.Builder()
+    fun getRetrofit(): Retrofit {
+        return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(getOkHttpClient())
             .addConverterFactory(getGsonConverterFactory())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-
-        return  retrofit.create(MoviesApiService::class.java)
     }
 
     @Singleton
     @Provides
-    suspend fun searchMovie(searchQuery : String , page : Int , movieType : String) : SearchResult {
-        return getMoviesApiService().searchMovie(searchQuery , page , movieType)
+    fun getMoviesApiService() : MoviesApiService{
+        return  getRetrofit().create(MoviesApiService::class.java)
     }
+
 }

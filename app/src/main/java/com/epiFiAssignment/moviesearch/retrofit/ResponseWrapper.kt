@@ -9,6 +9,7 @@ data class ResponseWrapper<out T>(val status : Status , val data : T? , val mess
     companion object{
         fun <T> success(data: T): ResponseWrapper<T> = ResponseWrapper(status = Status.SUCCESS , data = data , message = null)
         fun <T> error(message: String): ResponseWrapper<T> = ResponseWrapper(status = Status.ERROR , data = null , message = message)
+        fun <T> networkError(message: String): ResponseWrapper<T> = ResponseWrapper(status = Status.NETWORK_ERROR , data = null , message = message)
         fun <T> loading(): ResponseWrapper<T> = ResponseWrapper(status = Status.LOADING , data = null , message = null)
     }
 

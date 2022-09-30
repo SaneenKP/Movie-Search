@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Movie Search</string>
     <string name="synopsis">Synopsis</string>
+    <string name="something_went_wrong_string">Oops!! Something went wrong :(</string>
 </resources>

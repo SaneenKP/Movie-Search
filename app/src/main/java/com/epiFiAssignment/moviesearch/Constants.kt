@@ -10,7 +10,8 @@ class Constants {
         enum class Status {
             SUCCESS,
             ERROR,
-            LOADING
+            LOADING,
+            NETWORK_ERROR
         }
 
         //API Query Params
