@@ -66,8 +66,7 @@
                 android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/movie_title_Tv"
-                >
+                app:layout_constraintTop_toBottomOf="@id/movie_title_Tv">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -107,18 +106,99 @@
                 app:layout_constraintTop_toBottomOf="@id/movie_runtime_container"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <TextView
-                android:id="@+id/movie_rating_Tv"
+            <RatingBar
+                android:id="@+id/movie_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4.5/10"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sp_30"
-                android:layout_marginTop="@dimen/dp_28"
-                android:layout_marginEnd="@dimen/dp_8"
-                app:layout_constraintTop_toBottomOf="@id/movie_genre_Tv"
-                app:layout_constraintStart_toStartOf="parent" />
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:rating="5"
+                android:progressTint="@color/rating_star_color"
+                android:layout_marginTop="@dimen/dp_8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/movie_genre_Tv" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/movie_rating_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/movie_rating">
+
+                <TextView
+                    android:id="@+id/imbd_movie_rating_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7.5/10"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/dp_16"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/rotten_tomatoes_movie_rating_tv" />
+
+                <ImageView
+                    android:id="@+id/imbd_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/imdb_icon"
+                    android:layout_marginTop="@dimen/dp_8"
+                    app:layout_constraintTop_toBottomOf="@id/imbd_movie_rating_tv"
+                    app:layout_constraintStart_toStartOf="@id/imbd_movie_rating_tv"
+                    app:layout_constraintEnd_toEndOf="@id/imbd_movie_rating_tv" />
+
+                <TextView
+                    android:id="@+id/rotten_tomatoes_movie_rating_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:text="75%"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/metacritic_movie_rating_tv"
+                    app:layout_constraintStart_toEndOf="@id/imbd_movie_rating_tv"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/rotten_tomato_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rotten_tomatoes_tomato"
+                    android:layout_marginTop="@dimen/dp_8"
+                    app:layout_constraintTop_toBottomOf="@id/rotten_tomatoes_movie_rating_tv"
+                    app:layout_constraintStart_toStartOf="@id/rotten_tomatoes_movie_rating_tv"
+                    app:layout_constraintEnd_toEndOf="@id/rotten_tomatoes_movie_rating_tv" />
+
+                <TextView
+                    android:id="@+id/metacritic_movie_rating_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="75/10"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/dp_16"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/rotten_tomatoes_movie_rating_tv"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <ImageView
+                    android:id="@+id/metacritic_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/metacritic_icon2"
+                    android:layout_marginTop="@dimen/dp_8"
+                    app:layout_constraintTop_toBottomOf="@id/metacritic_movie_rating_tv"
+                    app:layout_constraintStart_toStartOf="@id/metacritic_movie_rating_tv"
+                    app:layout_constraintEnd_toEndOf="@id/metacritic_movie_rating_tv" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/synopsis_tv"
@@ -131,7 +211,7 @@
                 android:layout_marginTop="@dimen/dp_40"
                 android:layout_marginStart="@dimen/dp_16"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/movie_rating_Tv" />
+                app:layout_constraintTop_toBottomOf="@id/movie_rating_container" />
 
             <TextView
                 android:id="@+id/movie_description_tv"
