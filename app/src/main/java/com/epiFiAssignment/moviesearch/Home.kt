@@ -5,7 +5,9 @@ import android.os.Bundle
 import com.epiFiAssignment.moviesearch.Constants.Companion.Status
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.epiFiAssignment.moviesearch.adapters.MovieAdapter
+import com.epiFiAssignment.moviesearch.adapters.MovieTypeAdapter
 import com.epiFiAssignment.moviesearch.models.SearchResult
 import com.epiFiAssignment.moviesearch.utils.Utils
 import com.epiFiAssignment.moviesearch.viewmodels.HomeViewModel
@@ -17,6 +19,7 @@ class Home : AppCompatActivity() {
 
     lateinit var movieViewModel : HomeViewModel
     lateinit var movieAdapter: MovieAdapter
+    lateinit var movieTypeAdapter: MovieTypeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +31,19 @@ class Home : AppCompatActivity() {
 
     private fun init(){
 
+        movieTypeAdapter = MovieTypeAdapter()
         movieViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         movieViewModel.searchMovie("batman" , 1 , "movie")
 
         movies_recyclerview.apply {
             layoutManager = GridLayoutManager(context , Constants.COLUMN_COUNT)
             setHasFixedSize(true)
+        }
+
+        movie_types_recyclerview.apply {
+            layoutManager = LinearLayoutManager(context , LinearLayoutManager.HORIZONTAL , false)
+            setHasFixedSize(true)
+            adapter = movieTypeAdapter
         }
 
         observeViewModels()

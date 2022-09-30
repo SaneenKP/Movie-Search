@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
+        android:id="@+id/movie_type_btn"
         android:textSize="@dimen/sp_16"
         android:textColor="@color/white"
         android:layout_width="wrap_content"
@@ -14,7 +15,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:padding="@dimen/dp_12"
-        android:layout_margin="@dimen/dp_12"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
         android:elevation="@dimen/dp_20" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
