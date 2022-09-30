@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.epiFiAssignment.moviesearch.adapters.MovieAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieTypeAdapter
+import com.epiFiAssignment.moviesearch.listeners.MovieTypeClickListener
 import com.epiFiAssignment.moviesearch.models.SearchResult
 import com.epiFiAssignment.moviesearch.utils.Utils
 import com.epiFiAssignment.moviesearch.viewmodels.HomeViewModel
@@ -15,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
 
 @AndroidEntryPoint
-class Home : AppCompatActivity() {
+class Home : AppCompatActivity() , MovieTypeClickListener {
 
     lateinit var movieViewModel : HomeViewModel
     lateinit var movieAdapter: MovieAdapter
@@ -31,9 +32,8 @@ class Home : AppCompatActivity() {
 
     private fun init(){
 
-        movieTypeAdapter = MovieTypeAdapter()
+        movieTypeAdapter = MovieTypeAdapter( this)
         movieViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        movieViewModel.searchMovie("batman" , 1 , "movie")
 
         movies_recyclerview.apply {
             layoutManager = GridLayoutManager(context , Constants.COLUMN_COUNT)
@@ -46,8 +46,14 @@ class Home : AppCompatActivity() {
             adapter = movieTypeAdapter
         }
 
+        searchMovie(Constants.INITIAL_MOVIE_SEARCH_QUERY, Constants.INITIAL_PAGE_NUMBER , Constants.INITIAL_MOVIE_TYPE)
+
         observeViewModels()
 
+    }
+
+    private fun searchMovie(searchQuery : String , pageNo : Int , movieType : String){
+        movieViewModel.searchMovie(searchQuery , pageNo , movieType)
     }
 
     private fun observeViewModels(){
@@ -96,6 +102,10 @@ class Home : AppCompatActivity() {
 
     private fun handleNoDataState(){
 
+    }
+
+    override fun onClickMovieType(movieType: String) {
+        searchMovie("batman" , 1 , movieType)
     }
 
 }

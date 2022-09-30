@@ -7,13 +7,16 @@ import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.RecyclerView
 import com.epiFiAssignment.moviesearch.Constants
 import com.epiFiAssignment.moviesearch.R
+import com.epiFiAssignment.moviesearch.listeners.MovieTypeClickListener
 import kotlinx.android.synthetic.main.view_movie_type_btn.view.*
 import java.util.zip.Inflater
 
 class MovieTypeAdapter(
-    private val movieTypes: List<String> = Constants.movieTypes ,
-    private val movieTypesTexts: List<String> = Constants.movieTypeTexts
+    val onMovieTypeClickListener: MovieTypeClickListener
 ) : RecyclerView.Adapter<MovieTypeAdapter.MovieTypeViewHolder>() {
+
+    private val movieTypes: List<String> = Constants.movieTypes
+    private val movieTypesTexts: List<String> = Constants.movieTypeTexts
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieTypeViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.view_movie_type_btn,parent , false)
@@ -29,6 +32,11 @@ class MovieTypeAdapter(
     }
 
     inner class MovieTypeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        init {
+            itemView.setOnClickListener {
+                onMovieTypeClickListener.onClickMovieType(movieTypes[bindingAdapterPosition])
+            }
+        }
         fun bindData(position: Int){
             itemView.movie_type_btn.text = movieTypesTexts[position]
         }

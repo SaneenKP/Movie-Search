@@ -3,6 +3,11 @@ class Constants {
 
     companion object {
         const val connectionTimeOutSeconds : Long = 60;
+
+        //Home
+        const val INITIAL_MOVIE_SEARCH_QUERY = "batman"
+        const val INITIAL_PAGE_NUMBER = 1
+        const val INITIAL_MOVIE_TYPE = "movie"
         const val COLUMN_COUNT = 3;
 
         const val IMAGE_BINDING_ADAPTER_VARIABLE = "imageFromPath"
