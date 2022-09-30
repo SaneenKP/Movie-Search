@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId "com.epiFiAssignment.moviesearch"
         minSdk 22
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -21,6 +21,11 @@ android {
     }
 
     buildTypes {
+        debug{
+            buildConfigField 'String', 'IMAGE_BASE_URL', '"http://img.omdbapi.com/"'
+            buildConfigField 'String', 'BASE_URL', '"http://www.omdbapi.com/"'
+            buildConfigField 'String', 'API_KEY', '"1500762b"'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
