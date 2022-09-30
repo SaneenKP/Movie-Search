@@ -1,0 +1,93 @@
+package com.epiFiAssignment.moviesearch.retrofit
+
+import com.epiFiAssignment.moviesearch.BuildConfig
+import com.epiFiAssignment.moviesearch.Constants
+import com.epiFiAssignment.moviesearch.models.SearchResult
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@InstallIn(SingletonComponent::class)
+@Module
+class MovieRetrofitClient @Inject constructor() {
+
+    @Singleton
+    @Provides
+    fun getInterceptor() : Interceptor {
+        val requestInterceptor = Interceptor{
+
+            val url = it.request()
+                .url
+                .newBuilder()
+                .addQueryParameter(Constants.API_KEY_QUERY , BuildConfig.API_KEY)
+                .build()
+
+            val request = it.request()
+                .newBuilder()
+                .url(url)
+                .build()
+
+            return@Interceptor it.proceed(request)
+        }
+        return requestInterceptor
+    }
+
+
+    @Singleton
+    @Provides
+    fun getGsonConverterFactory() : GsonConverterFactory {
+        return GsonConverterFactory.create()
+    }
+
+
+    @Singleton
+    @Provides
+    fun getOkHttpClient() : OkHttpClient {
+
+        /***
+         * Only use the logging interceptor to log , Do not use it in production.
+         * This can cause a serious security issue and google play might reject it.
+         */
+        var httLog : HttpLoggingInterceptor = HttpLoggingInterceptor()
+        httLog.setLevel(HttpLoggingInterceptor.Level.BODY)
+
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(getInterceptor())
+            .addInterceptor(httLog)
+            .connectTimeout(Constants.connectionTimeOutSeconds , TimeUnit.SECONDS)
+            .build()
+
+        return okHttpClient
+    }
+
+    @Singleton
+    @Provides
+    fun getMoviesApiService() : MoviesApiService{
+
+        var retrofit : Retrofit = Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .client(getOkHttpClient())
+            .addConverterFactory(getGsonConverterFactory())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+
+        return  retrofit.create(MoviesApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    suspend fun searchMovie(searchQuery : String , page : Int , movieType : String) : SearchResult {
+        return getMoviesApiService().searchMovie(searchQuery , page , movieType)
+    }
+}
