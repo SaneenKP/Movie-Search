@@ -33,7 +33,7 @@
     <dimen name="dp_40">40dp</dimen>
 
     <dimen name="movie_image_width">116dp</dimen>
-    <dimen name="movie_image_height">145dp</dimen>
+    <dimen name="movie_image_height">150dp</dimen>
     <dimen name="movie_poster_margin_top">171dp</dimen>
     <dimen name="movie_background_height">250dp</dimen>
 </resources>

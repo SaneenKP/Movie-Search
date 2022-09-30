@@ -22,7 +22,7 @@ android {
 
     buildTypes {
         debug{
-            buildConfigField 'String', 'IMAGE_BASE_URL', '"http://img.omdbapi.com/"'
+            buildConfigField 'String', 'IMAGE_BASE_URL', '"http://img.omdbapi.com/?"'
             buildConfigField 'String', 'BASE_URL', '"http://www.omdbapi.com/"'
             buildConfigField 'String', 'API_KEY', '"1500762b"'
         }
