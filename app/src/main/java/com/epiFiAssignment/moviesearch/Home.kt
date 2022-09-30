@@ -6,6 +6,7 @@ import com.epiFiAssignment.moviesearch.Constants.Companion.Status
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.epiFiAssignment.moviesearch.adapters.MovieAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieTypeAdapter
 import com.epiFiAssignment.moviesearch.listeners.MovieTypeClickListener
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 class Home : AppCompatActivity() , MovieTypeClickListener {
 
     lateinit var movieViewModel : HomeViewModel
-    lateinit var movieAdapter: MovieAdapter
+    private var movieAdapter: MovieAdapter? = null
     lateinit var movieTypeAdapter: MovieTypeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,13 +72,18 @@ class Home : AppCompatActivity() , MovieTypeClickListener {
 
 
     }
+
     private fun handleSuccessState(data: SearchResult?) {
 
-        Utils.toast(context = this , "success")
         if (data != null){
             if (data.result != null){
-                movieAdapter = MovieAdapter(data.result)
-                movies_recyclerview.adapter = movieAdapter
+
+                if (movieAdapter==null){
+                    movieAdapter = MovieAdapter(data.result)
+                    movies_recyclerview.adapter = movieAdapter
+                }else{
+                    movieAdapter!!.updateData(data.result)
+                }
             }
             else{
                 handleNoDataState()
@@ -92,7 +98,6 @@ class Home : AppCompatActivity() , MovieTypeClickListener {
     }
 
     private fun handleLoadingState(){
-        Utils.toast(context = this , "loading")
     }
 
     private fun handleNetworkError(){
