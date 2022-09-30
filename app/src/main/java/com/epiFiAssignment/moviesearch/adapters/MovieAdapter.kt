@@ -11,7 +11,7 @@ import com.epiFiAssignment.moviesearch.models.Movie
 import com.epiFiAssignment.moviesearch.utils.Utils
 
 class MovieAdapter(
-    private val movieList: List<Movie>
+    private val movieList: ArrayList<Movie>?
 ) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -20,13 +20,13 @@ class MovieAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        movieList[position].let { movie ->
-            holder.bindData(movie)
+        if (movieList!=null){
+            holder.bindData(movieList[position])
         }
     }
 
     override fun getItemCount(): Int {
-      return movieList.size
+        return movieList?.size ?: 0
     }
 
     inner class MovieViewHolder(
