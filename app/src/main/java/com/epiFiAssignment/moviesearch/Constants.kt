@@ -5,5 +5,11 @@ class Constants {
     companion object {
         const val API_KEY_QUERY = "apikey"
         const val connectionTimeOutSeconds : Long = 60;
+
+        enum class Status {
+            SUCCESS,
+            ERROR,
+            LOADING
+        }
     }
 }
