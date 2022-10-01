@@ -44,5 +44,18 @@ class Constants {
         const val TYPE_QUERY = "type"
         const val PAGE_QUERY = "page"
         const val MOVIE_ID_QUERY = "i"
+
+        //Bottom sheet states
+        const val DRAGGING = "dragging"
+        const val SETTLING = "settling"
+        const val EXPANDING = "expanding"
+        const val COLLAPSED = "collapsed"
+        const val HIDDEN = "hidden"
+        const val HALF_EXPANDED = "half expanded"
+
+        //Ratings
+        const val IMBD_RATING = "Internet Movie Database"
+        const val ROTTEN_TOMATO_RATING = "Rotten Tomatoes"
+        const val METACRITIC_RATING = "Metacritic"
     }
 }

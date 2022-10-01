@@ -2,6 +2,7 @@ package com.epiFiAssignment.moviesearch
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.SearchView
 import com.epiFiAssignment.moviesearch.Constants.Companion.Status
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +16,7 @@ import com.epiFiAssignment.moviesearch.adapters.MovieTypeAdapter
 import com.epiFiAssignment.moviesearch.models.SearchResult
 import com.epiFiAssignment.moviesearch.utils.Utils
 import com.epiFiAssignment.moviesearch.viewmodels.HomeViewModel
+import com.epiFiAssignment.moviesearch.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
 
@@ -93,7 +95,11 @@ class Home : AppCompatActivity() , SearchView.OnQueryTextListener{
     }
 
     private fun handleOnMovieClicked(movieId: String) {
-        Utils.toast(this , "Clicked")
+        var movieDetailsFragment : MovieDetailsFragment = MovieDetailsFragment()
+        movieDetailsFragment.show(supportFragmentManager , "show")
+
+        var fragmentViewModel : SharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
+        fragmentViewModel.getMovieId().value = movieId
     }
 
     private fun handleMovieBookMarked(movieId : String){

@@ -41,13 +41,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun searchMovie(searchQuery : String , movieType : String) {
-
         movieList = moviePagingRepository.getMovies(searchQuery , movieType)
-
-//        viewModelScope.launch {
-//            movieSearchResponse.postValue(ResponseWrapper.loading())
-//            val response = movieRepository.searchMovie(searchQuery , page , movieType)
-//            movieSearchResponse.postValue(response)
-//        }
     }
 }

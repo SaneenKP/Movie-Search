@@ -8,9 +8,9 @@ import com.epiFiAssignment.moviesearch.R
 import com.epiFiAssignment.moviesearch.utils.Utils
 
 @BindingAdapter(Constants.IMAGE_BINDING_ADAPTER_VARIABLE)
-fun ImageView.imageFromImagePath(poster : String){
+fun ImageView.imageFromImagePath(poster : String?){
     Glide.with(this.context)
-        .load(poster)
+        .load(poster ?: "")
         .placeholder(R.drawable.movie_image_placeholder)
         .into(this)
 

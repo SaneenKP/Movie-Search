@@ -24,6 +24,10 @@ class Utils {
             Log.d(ERROR_TAG , message)
         }
 
+        fun calculateRating(rating: Double): Double {
+            return (rating * 5) / 10
+        }
+
         fun getMovieImageUrl(movieId : String) : String{
             var imageUrl : Uri? = Uri.parse(BuildConfig.IMAGE_BASE_URL)
                 .buildUpon()

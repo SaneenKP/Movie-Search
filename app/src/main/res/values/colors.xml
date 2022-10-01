@@ -26,7 +26,9 @@
     <!-- movie details -->
     <color name="rating_star_color">#FFDF00</color>
     <color name="movie_details_background">#FFF2D5</color>
-    <color name="movie_title_text_color">#282828</color>
-    <color name="movie_runtime_text_color">#333333</color>
+<!--    <color name="movie_title_text_color">#282828</color>-->
+    <color name="movie_title_text_color">#FFFFFF</color>
+<!--    <color name="movie_runtime_text_color">#333333</color>-->
+        <color name="movie_runtime_text_color">#FFFFFF</color>
 
 </resources>

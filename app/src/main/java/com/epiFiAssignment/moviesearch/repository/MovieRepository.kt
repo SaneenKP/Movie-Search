@@ -1,5 +1,6 @@
 package com.epiFiAssignment.moviesearch.repository
 
+import com.epiFiAssignment.moviesearch.models.Movie
 import com.epiFiAssignment.moviesearch.models.SearchResult
 import com.epiFiAssignment.moviesearch.retrofit.MovieNetworkClient
 import com.epiFiAssignment.moviesearch.retrofit.ResponseWrapper
@@ -17,6 +18,22 @@ class MovieRepository @Inject constructor(
 
         return try {
             val response = movieNetworkClient.searchMovie(searchQuery , page , movieType)
+            if (response.isSuccessful) {
+                ResponseWrapper.success(response.body())
+            }else{
+                ResponseWrapper.error("Oops!! Something went wrong :(")
+            }
+        }catch (e : Exception){
+            return ResponseWrapper.error(e.message.toString())
+        }
+    }
+
+    suspend fun getMovie(
+        movieId : String
+    ): ResponseWrapper<Movie?>{
+
+        return try {
+            val response = movieNetworkClient.getMovie(movieId)
             if (response.isSuccessful) {
                 ResponseWrapper.success(response.body())
             }else{
