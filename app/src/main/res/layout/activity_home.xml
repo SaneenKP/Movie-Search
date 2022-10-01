@@ -45,15 +45,13 @@
 
     <android.widget.SearchView
         android:id="@+id/movie_search"
+        android:queryHint="@string/search_query_hint"
+        android:iconifiedByDefault="false"
+        android:queryBackground="@android:color/transparent"
+        android:background="@drawable/background_movie_search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:queryHint="search movie or show"
-        android:background="@drawable/background_movie_search_view"
-        android:layout_margin="@dimen/dp_16"
-        android:gravity="center"
-        app:iconifiedByDefault="false"
-        app:queryBackground="@android:color/transparent"
-        android:padding="@dimen/dp_12" />
+        android:layout_margin="@dimen/dp_16"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/movie_types_recyclerview"
