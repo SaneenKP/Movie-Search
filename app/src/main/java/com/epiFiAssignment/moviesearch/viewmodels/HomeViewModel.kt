@@ -16,7 +16,22 @@ class HomeViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ) : ViewModel(){
 
+    private val movieSelected : MutableLiveData<String> = MutableLiveData()
+    private val movieType : MutableLiveData<String> = MutableLiveData()
+    private val bookMarked : MutableLiveData<String> = MutableLiveData()
     val movieSearchResponse : MutableLiveData<ResponseWrapper<SearchResult?>> = MutableLiveData()
+
+    fun getMovieType() : MutableLiveData<String>{
+        return this.movieType
+    }
+
+    fun getMovieBookmarked() : MutableLiveData<String> {
+       return this.bookMarked
+    }
+
+    fun getMovieSelected() : MutableLiveData<String> {
+        return this.movieSelected
+    }
 
     fun searchMovie(searchQuery : String , page : Int , movieType : String) {
         viewModelScope.launch {

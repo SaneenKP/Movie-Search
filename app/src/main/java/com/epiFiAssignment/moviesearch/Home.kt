@@ -6,10 +6,8 @@ import com.epiFiAssignment.moviesearch.Constants.Companion.Status
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.epiFiAssignment.moviesearch.adapters.MovieAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieTypeAdapter
-import com.epiFiAssignment.moviesearch.listeners.MovieTypeClickListener
 import com.epiFiAssignment.moviesearch.models.SearchResult
 import com.epiFiAssignment.moviesearch.utils.Utils
 import com.epiFiAssignment.moviesearch.viewmodels.HomeViewModel
@@ -17,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
 
 @AndroidEntryPoint
-class Home : AppCompatActivity() , MovieTypeClickListener {
+class Home : AppCompatActivity(){
 
     lateinit var movieViewModel : HomeViewModel
     private var movieAdapter: MovieAdapter? = null
@@ -33,12 +31,15 @@ class Home : AppCompatActivity() , MovieTypeClickListener {
 
     private fun init(){
 
-        movieTypeAdapter = MovieTypeAdapter( this)
         movieViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+
+        movieTypeAdapter = MovieTypeAdapter( movieViewModel)
+        movieAdapter = MovieAdapter(null , movieViewModel)
 
         movies_recyclerview.apply {
             layoutManager = GridLayoutManager(context , Constants.COLUMN_COUNT)
             setHasFixedSize(true)
+            adapter = movieAdapter
         }
 
         movie_types_recyclerview.apply {
@@ -58,6 +59,7 @@ class Home : AppCompatActivity() , MovieTypeClickListener {
     }
 
     private fun observeViewModels(){
+        //movie search response
         movieViewModel.movieSearchResponse.observe(this) { it ->
             it?.let { response ->
                 when (response.status) {
@@ -69,25 +71,35 @@ class Home : AppCompatActivity() , MovieTypeClickListener {
             }
         }
 
+        movieViewModel.getMovieType().observe(this) { movieType ->
+            searchMovie("batman", 1, movieType)
+        }
 
+        movieViewModel.getMovieBookmarked().observe(this) { movieId ->
+            handleMovieBookMarked(movieId)
+        }
 
+        movieViewModel.getMovieSelected().observe(this) { movieId ->
+            handleOnMovieClicked(movieId)
+        }
+
+    }
+
+    private fun handleOnMovieClicked(movieId: String) {
+        Utils.toast(this , "Clicked")
+    }
+
+    private fun handleMovieBookMarked(movieId : String){
+        Utils.toast(this , "Bookmarked")
     }
 
     private fun handleSuccessState(data: SearchResult?) {
 
         if (data != null){
-            if (data.result != null){
-
-                if (movieAdapter==null){
-                    movieAdapter = MovieAdapter(data.result)
-                    movies_recyclerview.adapter = movieAdapter
-                }else{
-                    movieAdapter!!.updateData(data.result)
-                }
-            }
-            else{
+            if (data.result != null)
+                movieAdapter!!.updateData(data.result)
+            else
                 handleNoDataState()
-            }
         }else{
             handleNoDataState()
         }
@@ -107,10 +119,6 @@ class Home : AppCompatActivity() , MovieTypeClickListener {
 
     private fun handleNoDataState(){
 
-    }
-
-    override fun onClickMovieType(movieType: String) {
-        searchMovie("batman" , 1 , movieType)
     }
 
 }

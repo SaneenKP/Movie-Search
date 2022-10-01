@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epiFiAssignment.moviesearch.databinding.MovieViewBinding
 import com.epiFiAssignment.moviesearch.models.Movie
 import com.epiFiAssignment.moviesearch.utils.Utils
+import com.epiFiAssignment.moviesearch.viewmodels.HomeViewModel
 
 class MovieAdapter(
-    private var movieList: ArrayList<Movie>?
+    private var movieList: ArrayList<Movie>?,
+    private var movieViewModel : HomeViewModel
 ) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -59,11 +61,11 @@ class MovieAdapter(
         override fun onClick(p0: View?) {
             when(p0?.id){
                 movieDataBinding.bookmark.id -> {
-                    Utils.toast(context , "Bookmarked")
+                    movieViewModel.getMovieBookmarked().value = this.movie?.imdbID
                 }
 
                 movieDataBinding.root.id -> {
-                    Utils.toast(context , "Clicked")
+                    movieViewModel.getMovieSelected().value = this.movie?.imdbID
                 }
             }
         }
