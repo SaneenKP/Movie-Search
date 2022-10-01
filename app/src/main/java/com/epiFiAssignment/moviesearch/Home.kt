@@ -116,7 +116,6 @@ class Home : AppCompatActivity(){
 
     }
 
-
     private fun handleNoDataState(){
 
     }
