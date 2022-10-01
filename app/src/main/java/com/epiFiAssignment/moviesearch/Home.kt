@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.epiFiAssignment.moviesearch.Constants.Companion.Status
 import androidx.lifecycle.ViewModelProvider
+import androidx.loader.content.Loader
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.epiFiAssignment.moviesearch.adapters.LoaderAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieTypeAdapter
 import com.epiFiAssignment.moviesearch.models.SearchResult
@@ -18,8 +21,10 @@ import kotlinx.android.synthetic.main.activity_home.*
 class Home : AppCompatActivity(){
 
     lateinit var movieViewModel : HomeViewModel
-    private var movieAdapter: MovieAdapter? = null
+    lateinit var movieAdapter: MovieAdapter
     lateinit var movieTypeAdapter: MovieTypeAdapter
+    private var currentMovieType = Constants.INITIAL_MOVIE_TYPE
+    private var currentSearchQuery = Constants.INITIAL_MOVIE_SEARCH_QUERY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,12 +39,14 @@ class Home : AppCompatActivity(){
         movieViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
         movieTypeAdapter = MovieTypeAdapter( movieViewModel)
-        movieAdapter = MovieAdapter(null , movieViewModel)
+        movieAdapter = MovieAdapter(movieViewModel)
 
         movies_recyclerview.apply {
             layoutManager = GridLayoutManager(context , Constants.COLUMN_COUNT)
             setHasFixedSize(true)
-            adapter = movieAdapter
+            adapter = movieAdapter.withLoadStateFooter(
+                footer = LoaderAdapter()
+            )
         }
 
         movie_types_recyclerview.apply {
@@ -48,31 +55,24 @@ class Home : AppCompatActivity(){
             adapter = movieTypeAdapter
         }
 
-        searchMovie(Constants.INITIAL_MOVIE_SEARCH_QUERY, Constants.INITIAL_PAGE_NUMBER , Constants.INITIAL_MOVIE_TYPE)
+        searchMovie(currentSearchQuery, currentMovieType)
 
         observeViewModels()
 
     }
 
-    private fun searchMovie(searchQuery : String , pageNo : Int , movieType : String){
-        movieViewModel.searchMovie(searchQuery , pageNo , movieType)
+    private fun searchMovie(searchQuery : String , movieType : String){
+        movieViewModel.searchMovie(searchQuery ,  movieType)
     }
 
     private fun observeViewModels(){
-        //movie search response
-        movieViewModel.movieSearchResponse.observe(this) { it ->
-            it?.let { response ->
-                when (response.status) {
-                    Status.SUCCESS -> handleSuccessState(response.data)
-                    Status.ERROR -> handleErrorState()
-                    Status.LOADING -> handleLoadingState()
-                    Status.NETWORK_ERROR -> handleNetworkError()
-                }
-            }
+
+        movieViewModel.movieList.observe(this) {
+            movieAdapter.submitData(lifecycle, it)
         }
 
         movieViewModel.getMovieType().observe(this) { movieType ->
-            searchMovie("batman", 1, movieType)
+            searchMovie(currentSearchQuery,  currentMovieType)
         }
 
         movieViewModel.getMovieBookmarked().observe(this) { movieId ->
@@ -91,18 +91,6 @@ class Home : AppCompatActivity(){
 
     private fun handleMovieBookMarked(movieId : String){
         Utils.toast(this , "Bookmarked")
-    }
-
-    private fun handleSuccessState(data: SearchResult?) {
-
-        if (data != null){
-            if (data.result != null)
-                movieAdapter!!.updateData(data.result)
-            else
-                handleNoDataState()
-        }else{
-            handleNoDataState()
-        }
     }
 
     private fun handleErrorState(){

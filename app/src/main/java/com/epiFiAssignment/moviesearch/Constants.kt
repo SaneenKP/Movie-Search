@@ -7,11 +7,16 @@ class Constants {
         //Home
         const val INITIAL_MOVIE_SEARCH_QUERY = "batman"
         const val INITIAL_PAGE_NUMBER = 1
-        const val INITIAL_MOVIE_TYPE = "movie"
+        const val INITIAL_MOVIE_TYPE = ""
         const val COLUMN_COUNT = 3;
-
         const val IMAGE_BINDING_ADAPTER_VARIABLE = "imageFromPath"
 
+        //Paging
+        const val PAGE_SIZE = 10
+        const val MAX_PAGE_COUNT = 100
+
+
+        //Response
         enum class Status {
             SUCCESS,
             ERROR,
