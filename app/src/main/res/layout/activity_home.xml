@@ -43,7 +43,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.appcompat.widget.SearchView
+    <android.widget.SearchView
         android:id="@+id/movie_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -2,6 +2,7 @@ package com.epiFiAssignment.moviesearch
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.SearchView
 import com.epiFiAssignment.moviesearch.Constants.Companion.Status
 import androidx.lifecycle.ViewModelProvider
 import androidx.loader.content.Loader
@@ -18,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
 
 @AndroidEntryPoint
-class Home : AppCompatActivity(){
+class Home : AppCompatActivity() , SearchView.OnQueryTextListener{
 
     lateinit var movieViewModel : HomeViewModel
     lateinit var movieAdapter: MovieAdapter
@@ -57,7 +58,13 @@ class Home : AppCompatActivity(){
 
         searchMovie(currentSearchQuery, currentMovieType)
 
+        movie_search.setOnQueryTextListener(this)
+
         observeViewModels()
+
+    }
+
+    private fun setUpSearchView(){
 
     }
 
@@ -106,6 +113,18 @@ class Home : AppCompatActivity(){
 
     private fun handleNoDataState(){
 
+    }
+
+    override fun onQueryTextSubmit(searchQuery: String?): Boolean {
+        Utils.toast(this , "${searchQuery}")
+        if (searchQuery != null) {
+            this.currentSearchQuery = searchQuery
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(p0: String?): Boolean {
+        return false
     }
 
 }
