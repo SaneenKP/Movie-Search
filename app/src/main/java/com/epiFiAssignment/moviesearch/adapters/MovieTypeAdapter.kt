@@ -34,7 +34,7 @@ class MovieTypeAdapter(
     inner class MovieTypeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         init {
             itemView.setOnClickListener {
-                movieViewModel.getMovieType().value = movieTypes[bindingAdapterPosition]
+                movieViewModel.changeMovieType(movieTypes[bindingAdapterPosition])
             }
         }
         fun bindData(position: Int){

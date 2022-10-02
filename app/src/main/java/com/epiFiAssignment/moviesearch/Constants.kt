@@ -5,7 +5,7 @@ class Constants {
         const val connectionTimeOutSeconds : Long = 60;
 
         //Home
-        const val INITIAL_MOVIE_SEARCH_QUERY = "batman"
+        const val DEFAULT_MOVIE_SEARCH_QUERY = "batman"
         const val INITIAL_PAGE_NUMBER = 1
         const val INITIAL_MOVIE_TYPE = ""
         const val COLUMN_COUNT = 3;

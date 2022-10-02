@@ -1,35 +1,34 @@
 package com.epiFiAssignment.moviesearch.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
+import com.epiFiAssignment.moviesearch.Constants
 import com.epiFiAssignment.moviesearch.models.Movie
 import com.epiFiAssignment.moviesearch.models.SearchResult
 import com.epiFiAssignment.moviesearch.repository.MoviePagingRepository
 import com.epiFiAssignment.moviesearch.repository.MovieRepository
 import com.epiFiAssignment.moviesearch.retrofit.MovieRetrofitService
 import com.epiFiAssignment.moviesearch.retrofit.ResponseWrapper
+import com.epiFiAssignment.moviesearch.utils.MergedMovieTypeAndQueryStringLiveData
 import com.epiFiAssignment.moviesearch.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import okhttp3.internal.userAgent
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val moviePagingRepository: MoviePagingRepository,
-    private val movieRepository: MovieRepository
 ) : ViewModel(){
 
-    var movieList : LiveData<PagingData<Movie>> = MutableLiveData()
+    private val changeMovieType : MutableLiveData<String> = MutableLiveData()
     private val movieSelected : MutableLiveData<String> = MutableLiveData()
-    private val movieType : MutableLiveData<String> = MutableLiveData()
     private val bookMarked : MutableLiveData<String> = MutableLiveData()
-    val movieSearchResponse : MutableLiveData<ResponseWrapper<SearchResult?>> = MutableLiveData()
+    private val movieType : MutableLiveData<String> = MutableLiveData()
+    private val searchQuery : MutableLiveData<String> = MutableLiveData()
 
-    fun getMovieType() : MutableLiveData<String>{
-        return this.movieType
+    val movieList = Transformations.switchMap(MergedMovieTypeAndQueryStringLiveData(searchQuery , movieType)){
+        it?.second?.let { it1 -> it.first?.let { it2 -> moviePagingRepository.getMovies(searchQuery = it2, movieType = it1) } }
     }
 
     fun getMovieBookmarked() : MutableLiveData<String> {
@@ -40,7 +39,23 @@ class HomeViewModel @Inject constructor(
         return this.movieSelected
     }
 
-    fun searchMovie(searchQuery : String , movieType : String) {
-        movieList = moviePagingRepository.getMovies(searchQuery , movieType)
+    fun changeMovieType(movieType : String){
+        this.changeMovieType.value = movieType
+    }
+    fun getMovieTypeChangeStatus() : MutableLiveData<String>{
+        return this.changeMovieType
+    }
+
+    private fun setMovieType(movieType : String){
+        this.movieType.value = movieType
+    }
+
+    private fun setSearchQuery(searchQuery : String){
+        this.searchQuery.value = searchQuery
+    }
+
+    fun searchMovie(searchQuery: String , movieType: String){
+        setSearchQuery(searchQuery = searchQuery)
+        setMovieType(movieType = movieType)
     }
 }

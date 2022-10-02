@@ -5,12 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import com.epiFiAssignment.moviesearch.Constants.Companion.Status
 import androidx.lifecycle.ViewModelProvider
-import androidx.loader.content.Loader
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -18,7 +14,6 @@ import com.epiFiAssignment.moviesearch.adapters.LoaderAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieTypeAdapter
 import com.epiFiAssignment.moviesearch.databinding.ActivityHomeBinding
-import com.epiFiAssignment.moviesearch.models.SearchResult
 import com.epiFiAssignment.moviesearch.utils.Utils
 import com.epiFiAssignment.moviesearch.viewmodels.HomeViewModel
 import com.epiFiAssignment.moviesearch.viewmodels.SharedViewModel
@@ -35,8 +30,9 @@ class Home : AppCompatActivity() ,
     lateinit var movieAdapter: MovieAdapter
     lateinit var movieTypeAdapter: MovieTypeAdapter
     private var currentMovieType = Constants.INITIAL_MOVIE_TYPE
-    private var currentSearchQuery = Constants.INITIAL_MOVIE_SEARCH_QUERY
+    private var currentSearchQuery = Constants.DEFAULT_MOVIE_SEARCH_QUERY
     lateinit var homeViewBinding : ActivityHomeBinding
+    private val FRAGMENT_TAG = "movie_details_fragment"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,21 +67,17 @@ class Home : AppCompatActivity() ,
             adapter = movieTypeAdapter
         }
 
-        searchMovie(currentSearchQuery, currentMovieType)
-
         movie_search.setOnQueryTextListener(this)
+        searchMovie(currentSearchQuery , currentMovieType)
 
         observeViewModels()
 
     }
 
-    private fun setUpSearchView(){
-
-    }
-
     private fun searchMovie(searchQuery : String , movieType : String){
-        movieViewModel.searchMovie(searchQuery ,  movieType)
+        movieViewModel.searchMovie(searchQuery , movieType)
     }
+
 
     private fun observeViewModels(){
 
@@ -94,8 +86,8 @@ class Home : AppCompatActivity() ,
             movieAdapter.submitData(lifecycle, it)
         }
 
-        movieViewModel.getMovieType().observe(this) { movieType ->
-            searchMovie(currentSearchQuery,  currentMovieType)
+        movieViewModel.getMovieTypeChangeStatus().observe(this) { movieType ->
+            handleMovieTypeChange(movieType)
         }
 
         movieViewModel.getMovieBookmarked().observe(this) { movieId ->
@@ -108,9 +100,14 @@ class Home : AppCompatActivity() ,
 
     }
 
+    private fun handleMovieTypeChange(movieType: String) {
+        this.currentMovieType = movieType
+        searchMovie(currentSearchQuery , currentMovieType)
+    }
+
     private fun handleOnMovieClicked(movieId: String) {
         var movieDetailsFragment : MovieDetailsFragment = MovieDetailsFragment()
-        movieDetailsFragment.show(supportFragmentManager , "show")
+        movieDetailsFragment.show(supportFragmentManager , FRAGMENT_TAG)
 
         var fragmentViewModel : SharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
         fragmentViewModel.getMovieId().value = movieId
@@ -139,6 +136,7 @@ class Home : AppCompatActivity() ,
         Utils.toast(this , "${searchQuery}")
         if (searchQuery != null) {
             this.currentSearchQuery = searchQuery
+            movieViewModel.searchMovie(currentSearchQuery , currentMovieType)
         }
         return true
     }
