@@ -5,6 +5,8 @@ import androidx.paging.PagingState
 import com.epiFiAssignment.moviesearch.Constants
 import com.epiFiAssignment.moviesearch.models.Movie
 import com.epiFiAssignment.moviesearch.repository.MovieRepository
+import com.epiFiAssignment.moviesearch.Constants.Companion.Status
+import java.io.IOException
 
 class MoviePagingSource(
     private val searchQuery: String,
@@ -25,14 +27,19 @@ class MoviePagingSource(
             val position = params.key ?: INITIAL_PAGE
             val response = movieRepository.searchMovie(searchQuery , position , searchType)
             val endOfPaginationReached = (response.data?.result == null)
-
-            LoadResult.Page(
-                data = response.data!!.result,
-                prevKey = if(position == INITIAL_PAGE) null else position.minus(1),
-                nextKey = if (endOfPaginationReached) null else position.plus(1)
-            )
+            if (response.status == Status.ERROR){
+                throw Exception(response.message)
+            }else{
+                LoadResult.Page(
+                    data = response.data!!.result,
+                    prevKey = if(position == INITIAL_PAGE) null else position.minus(1),
+                    nextKey = if (endOfPaginationReached) null else position.plus(1)
+                )
+            }
         }catch (e : Exception){
             LoadResult.Error(e)
+        }catch (ioException : IOException){
+            LoadResult.Error(ioException)
         }
     }
 }

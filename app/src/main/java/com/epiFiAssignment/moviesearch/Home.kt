@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -19,6 +20,8 @@ import com.epiFiAssignment.moviesearch.viewmodels.HomeViewModel
 import com.epiFiAssignment.moviesearch.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
+import retrofit2.HttpException
+import java.io.IOException
 
 @AndroidEntryPoint
 class Home : AppCompatActivity() ,
@@ -52,6 +55,7 @@ class Home : AppCompatActivity() ,
 
         movieTypeAdapter = MovieTypeAdapter( movieViewModel)
         movieAdapter = MovieAdapter(movieViewModel)
+        handleLoadStateError()
 
         movies_recyclerview.apply {
             layoutManager = GridLayoutManager(context , Constants.COLUMN_COUNT)
@@ -74,10 +78,44 @@ class Home : AppCompatActivity() ,
 
     }
 
-    private fun searchMovie(searchQuery : String , movieType : String){
-        movieViewModel.searchMovie(searchQuery , movieType)
+    private fun handleLoadStateError(){
+        movieAdapter.addLoadStateListener {loadState ->
+            val errorState = when {
+                loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
+                loadState.append is LoadState.Error -> loadState.append as LoadState.Error
+                loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
+                else -> null
+            }
+
+            when (val throwable = errorState?.error) {
+                is IOException -> {
+                    handleSomethingWentWrong()
+                }
+                is HttpException -> {
+                    if (throwable.code() == 401) {
+                        handleSomethingWentWrong()
+                    }
+                    else {
+                        handleSomethingWentWrong()
+                    }
+                }
+                else ->{
+                    if (throwable != null) {
+                        when(throwable.message){
+                            Constants.MOVIE_NOT_FOUND ->  handleNoDataState()
+                            Constants.SOMETHING_WENT_WRONG_ERROR -> handleSomethingWentWrong()
+                        }
+                    }
+                }
+            }
+        }
     }
 
+    private fun searchMovie(searchQuery : String , movieType : String){
+        removeVisibilityOfAllUtilityView()
+        homeViewBinding.moviesRecyclerview.visibility = View.VISIBLE
+        movieViewModel.searchMovie(searchQuery , movieType)
+    }
 
     private fun observeViewModels(){
 
@@ -117,26 +155,32 @@ class Home : AppCompatActivity() ,
         Utils.toast(this , "Bookmarked")
     }
 
-    private fun handleErrorState(){
-
-    }
-
     private fun handleLoadingState(){
     }
 
     private fun handleNetworkError(){
+    }
 
+    private fun handleSomethingWentWrong(){
+       homeViewBinding.moviesRecyclerview.visibility = View.GONE
+        something_went_wrong_view.visibility = View.VISIBLE
     }
 
     private fun handleNoDataState(){
+        homeViewBinding.moviesRecyclerview.visibility = View.GONE
+        no_data_available_view.visibility = View.VISIBLE
+    }
 
+    private fun removeVisibilityOfAllUtilityView(){
+        no_data_available_view.visibility = View.GONE
+        something_went_wrong_view.visibility = View.GONE
     }
 
     override fun onQueryTextSubmit(searchQuery: String?): Boolean {
         Utils.toast(this , "${searchQuery}")
         if (searchQuery != null) {
             this.currentSearchQuery = searchQuery
-            movieViewModel.searchMovie(currentSearchQuery , currentMovieType)
+            searchMovie(currentSearchQuery , currentMovieType)
         }
         return true
     }
