@@ -57,5 +57,10 @@ class Constants {
         const val IMBD_RATING = "Internet Movie Database"
         const val ROTTEN_TOMATO_RATING = "Rotten Tomatoes"
         const val METACRITIC_RATING = "Metacritic"
+
+        //Error responses
+        const val MOVIE_NOT_FOUND = "Movie not found!"
+        const val SOMETHING_WENT_WRONG_ERROR = "oops !! Something Went Wrong :( "
+        const val NO_RESULT_ERROR = "Sorry mate !! No Results for your search"
     }
 }
