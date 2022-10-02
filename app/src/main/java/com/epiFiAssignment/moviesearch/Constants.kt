@@ -62,5 +62,7 @@ class Constants {
         const val MOVIE_NOT_FOUND = "Movie not found!"
         const val SOMETHING_WENT_WRONG_ERROR = "oops !! Something Went Wrong :( "
         const val NO_RESULT_ERROR = "Sorry mate !! No Results for your search"
+
+        const val NOT_AVAILABLE = "N/A"
     }
 }

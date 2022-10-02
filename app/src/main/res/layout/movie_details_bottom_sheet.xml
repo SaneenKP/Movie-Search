@@ -180,7 +180,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/Widget.AppCompat.RatingBar.Small"
-                            android:rating="@{movie.averageRating}"
+                            android:rating="@{movie.averageRating.intValue()}"
                             android:numStars="5"
                             android:progressTint="@color/rating_star_color"
                             android:secondaryProgressTint="@color/white"

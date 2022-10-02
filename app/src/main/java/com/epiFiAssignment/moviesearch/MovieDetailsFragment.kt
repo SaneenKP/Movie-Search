@@ -52,7 +52,7 @@ class MovieDetailsFragment() : BottomSheetDialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        movieDetailsDetailsBottomSheetBinding.movie = null
+        activity!!.viewModelStore.clear()
     }
 
     private fun setBottomSheetHeight(){
@@ -140,23 +140,37 @@ class MovieDetailsFragment() : BottomSheetDialogFragment() {
     private fun bindData(data: Movie) {
         this.movie = data
         configureRatings(data.Ratings)
-        configureData(data)
+        configureData()
         movieDetailsDetailsBottomSheetBinding.movie = this.movie
 
     }
 
-    private fun configureData(data: Movie) {
-        this.movie?.averageRating = data.imdbRating?.toDouble()
-            ?.let { Utils.calculateRating(it).toInt() }
+    private fun configureData() {
+        if(this.movie?.Title.isNullOrEmpty()) this.movie?.Title = Constants.NOT_AVAILABLE
+        if(this.movie?.Rated.isNullOrEmpty()) this.movie?.Rated = Constants.NOT_AVAILABLE
+        if(this.movie?.Runtime.isNullOrEmpty()) this.movie?.Runtime = Constants.NOT_AVAILABLE
+        if(this.movie?.Genre.isNullOrEmpty()) this.movie?.Genre = Constants.NOT_AVAILABLE
+        if(this.movie?.Plot.isNullOrEmpty()) this.movie?.Plot = Constants.NOT_AVAILABLE
+        if(this.movie?.Poster.isNullOrEmpty()) this.movie?.Poster = ""
+        if(this.movie?.Metascore.isNullOrEmpty()) this.movie?.Metascore = Constants.NOT_AVAILABLE
+
+        if(this.movie?.imdbRating.isNullOrEmpty()){
+            this.movie?.imdbRating = Constants.NOT_AVAILABLE
+            this.movie?.averageRating = 0.0
+        }else{
+            this.movie?.averageRating = this.movie?.imdbRating?.let { Utils.calculateRating(it) }
+        }
+        if(this.movie?.imbdRatingValue.isNullOrEmpty()) this.movie?.imbdRatingValue = Constants.NOT_AVAILABLE
+        if(this.movie?.rtRating.isNullOrEmpty()) this.movie?.rtRating = Constants.NOT_AVAILABLE
+        if(this.movie?.mtRating.isNullOrEmpty()) this.movie?.mtRating = Constants.NOT_AVAILABLE
     }
 
     private fun configureRatings(ratings: ArrayList<Ratings>) {
-
         for (rating in ratings){
             when(rating.Source){
-                Constants.IMBD_RATING -> this.movie?.imbdRatingValue =   if(rating.Value.isNullOrBlank())  "N/A" else rating.Value
-                Constants.ROTTEN_TOMATO_RATING -> this.movie?.rtRating = if(rating.Value.isNullOrBlank())  "N/A" else rating.Value
-                Constants.METACRITIC_RATING -> this.movie?.mtRating =    if(rating.Value.isNullOrBlank())  "N/A" else rating.Value
+                Constants.IMBD_RATING -> this.movie?.imbdRatingValue =   if(rating.Value.isNullOrBlank())  Constants.NOT_AVAILABLE else rating.Value
+                Constants.ROTTEN_TOMATO_RATING -> this.movie?.rtRating = if(rating.Value.isNullOrBlank())  Constants.NOT_AVAILABLE else rating.Value
+                Constants.METACRITIC_RATING -> this.movie?.mtRating =    if(rating.Value.isNullOrBlank())  Constants.NOT_AVAILABLE else rating.Value
             }
         }
     }

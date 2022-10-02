@@ -26,8 +26,9 @@ class Utils {
             Log.d(ERROR_TAG , message)
         }
 
-        fun calculateRating(rating: Double): Double {
-            return (rating * 5) / 10
+        fun calculateRating(rating: String): Double {
+            return if (rating == Constants.NOT_AVAILABLE) 0.0
+            else (rating.toDouble() * 5) / 10
         }
 
         fun dpToPixel(context: Context , dp: Float): Float {

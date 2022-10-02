@@ -32,9 +32,9 @@ data class Movie (
     @SerializedName("Website"    ) var Website       : String?            = null,
     @SerializedName("Response"   ) var Response      : String?            = null,
     @SerializedName("Error"     )  var error         : String?            = null,
-    var averageRating      : Int?                    = null,
-    var imbdRatingValue    : String?                 = "N/A",
-    var rtRating           : String?                 = "N/A",
-    var mtRating           : String?                 = "N/A",
+    var averageRating      : Double?,
+    var imbdRatingValue    : String?                 = null,
+    var rtRating           : String?                 = null,
+    var mtRating           : String?                 = null,
 
     )
