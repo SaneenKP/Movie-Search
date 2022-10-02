@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.res.Resources
 import android.view.LayoutInflater
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.epiFiAssignment.moviesearch.Constants.Companion.Status
@@ -16,6 +17,7 @@ import com.epiFiAssignment.moviesearch.viewmodels.MovieDetailsFragmentViewModel
 import com.epiFiAssignment.moviesearch.viewmodels.SharedViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.movie_details_bottom_sheet.*
+import kotlinx.android.synthetic.main.somthing_went_wrong_view.*
 
 
 class MovieDetailsFragment() : BottomSheetDialogFragment() {
@@ -41,7 +43,6 @@ class MovieDetailsFragment() : BottomSheetDialogFragment() {
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         fragmentViewModel = ViewModelProvider(requireActivity())[MovieDetailsFragmentViewModel::class.java]
 
-        setBottomSheetHeight()
         observeViewModel()
 
 
@@ -57,7 +58,11 @@ class MovieDetailsFragment() : BottomSheetDialogFragment() {
     private fun setBottomSheetHeight(){
         var nestedScrollView = movieDetailsDetailsBottomSheetBinding.bottomSheetSv
         var layoutParams = nestedScrollView.layoutParams
-         layoutParams.height = (getScreenHeight()*90)/100
+         layoutParams.height = getBottomSheetMaxHeight()
+    }
+
+    private fun getBottomSheetMaxHeight() : Int{
+        return (getScreenHeight()*90)/100
     }
 
     private fun getScreenHeight(): Int {
@@ -78,6 +83,7 @@ class MovieDetailsFragment() : BottomSheetDialogFragment() {
 
                 when (response.status) {
                     Status.SUCCESS -> {
+                        handleSuccess()
                         if (response!=null){
                             if (response.data!=null){
                                 bindData(response.data)
@@ -85,15 +91,50 @@ class MovieDetailsFragment() : BottomSheetDialogFragment() {
                         }
                     }
                     Status.LOADING -> {
+                        handleLoading()
                     }
                     Status.ERROR -> {
+                        handleError()
                     }
                     Status.NETWORK_ERROR -> {
+                        handleError()
                     }
                 }
             }
         }
 
+    }
+
+    private fun handleSuccess(){
+        changeLoadingView(View.GONE)
+        changeSomethingWentWrongView(View.GONE)
+        changeBottomSheetContentView(View.VISIBLE)
+    }
+
+    private fun handleError(){
+        changeLoadingView(View.GONE)
+        changeBottomSheetContentView(View.GONE)
+        changeSomethingWentWrongView(View.VISIBLE)
+    }
+
+    private fun handleLoading(){
+        changeBottomSheetContentView(View.GONE)
+        changeSomethingWentWrongView(View.GONE)
+        changeLoadingView(View.VISIBLE)
+    }
+
+    private fun changeLoadingView(status: Int) {
+        movieDetailsDetailsBottomSheetBinding.loadingView.root.layoutParams.height = getBottomSheetMaxHeight()
+        movieDetailsDetailsBottomSheetBinding.loadingView.root.visibility = status
+    }
+
+    private fun changeSomethingWentWrongView(status : Int){
+        movieDetailsDetailsBottomSheetBinding.somethingWentWrong.root.layoutParams.height = getBottomSheetMaxHeight()
+        movieDetailsDetailsBottomSheetBinding.somethingWentWrong.root.visibility = status
+    }
+
+    private fun changeBottomSheetContentView(status: Int){
+        movieDetailsDetailsBottomSheetBinding.entireBottomSheetContentContainer.visibility = status
     }
 
     private fun bindData(data: Movie) {
