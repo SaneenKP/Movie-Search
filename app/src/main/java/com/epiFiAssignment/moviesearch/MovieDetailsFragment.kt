@@ -2,11 +2,9 @@ package com.epiFiAssignment.moviesearch
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.content.res.Resources
 import android.view.LayoutInflater
-import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.epiFiAssignment.moviesearch.Constants.Companion.Status
@@ -14,15 +12,17 @@ import com.epiFiAssignment.moviesearch.databinding.MovieDetailsBottomSheetBindin
 import com.epiFiAssignment.moviesearch.models.Movie
 import com.epiFiAssignment.moviesearch.models.Ratings
 import com.epiFiAssignment.moviesearch.utils.Utils
+import com.epiFiAssignment.moviesearch.viewmodels.MovieDetailsFragmentViewModel
 import com.epiFiAssignment.moviesearch.viewmodels.SharedViewModel
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.movie_details_bottom_sheet.*
 
 
 class MovieDetailsFragment() : BottomSheetDialogFragment() {
 
-    lateinit var fragmentViewModel: SharedViewModel
+    private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var fragmentViewModel : MovieDetailsFragmentViewModel
+
     private var movieId : String = ""
     private var movie : Movie? = null
     lateinit var movieDetailsDetailsBottomSheetBinding : MovieDetailsBottomSheetBinding
@@ -38,7 +38,9 @@ class MovieDetailsFragment() : BottomSheetDialogFragment() {
     private fun init(){
         if (fragmentActivity==null) fragmentActivity = activity
         setBottomSheetHeight()
-        fragmentViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        fragmentViewModel = ViewModelProvider(requireActivity())[MovieDetailsFragmentViewModel::class.java]
+
         setBottomSheetHeight()
         observeViewModel()
 
@@ -49,6 +51,7 @@ class MovieDetailsFragment() : BottomSheetDialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
+        movieDetailsDetailsBottomSheetBinding.movie = null
     }
 
     private fun setBottomSheetHeight(){
@@ -64,7 +67,7 @@ class MovieDetailsFragment() : BottomSheetDialogFragment() {
     private fun observeViewModel(){
 
         activity?.let {
-            fragmentViewModel.getMovieId().observe(it) { movieId ->
+            sharedViewModel.getMovieId().observe(it) { movieId ->
                 this.movieId = movieId
                 fragmentViewModel.getMovie(movieId)
             }
