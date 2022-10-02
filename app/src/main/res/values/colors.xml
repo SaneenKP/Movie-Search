@@ -18,6 +18,7 @@
     <!-- home -->
     <color name="home_view_background">#383838</color>
     <color name="movie_type_button_unselected_background_color">#383838</color>
+    <color name="movie_type_button_selected_background_color">#555555</color>
     <color name="movie_overlay_gradient_start_color">#73333333</color>
     <color name="movie_overlay_gradient_end_color">#00333333</color>
 

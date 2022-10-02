@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.view.menu.MenuView
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.epiFiAssignment.moviesearch.Constants
 import com.epiFiAssignment.moviesearch.R
@@ -34,11 +35,26 @@ class MovieTypeAdapter(
     inner class MovieTypeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         init {
             itemView.setOnClickListener {
+                movieViewModel.setClickState(bindingAdapterPosition , true)
                 movieViewModel.changeMovieType(movieTypes[bindingAdapterPosition])
+                notifyDataSetChanged()
             }
         }
         fun bindData(position: Int){
             itemView.movie_type_btn.text = movieTypesTexts[position]
+
+            if (movieViewModel.getClickState()[position]) handleOnMovieTypeSelected()
+            else handleOnMovieTypeUnSelected()
+
+        }
+        private fun handleOnMovieTypeSelected(){
+            itemView.root_view.background = itemView.context.resources.getDrawable(R.drawable.background_movie_type_button_selected_view)
+            ViewCompat.setElevation(itemView.root_view , 16F)
+        }
+
+        private fun handleOnMovieTypeUnSelected(){
+            itemView.root_view.background = itemView.context.resources.getDrawable(R.drawable.background_movie_type_button_unselected_view)
+            ViewCompat.setElevation(itemView.root_view , 0F)
         }
     }
 }
