@@ -6,4 +6,6 @@
     <string name="loading">Loading...</string>
     <string name="search_query_hint">Search movie or series</string>
     <string name="not_available">N/A</string>
+
+    <string name="bookmarks">Bookmarks</string>
 </resources>

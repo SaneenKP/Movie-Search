@@ -1,5 +1,6 @@
 package com.epiFiAssignment.moviesearch
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -49,7 +50,9 @@ class Home : AppCompatActivity() ,
 
         swipeRefresh.setOnRefreshListener(this)
         movieViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+
         homeViewBinding.titleTv.setOnClickListener(this)
+        homeViewBinding.showBookmarksBtn.setOnClickListener(this)
 
         movieTypeAdapter = MovieTypeAdapter( movieViewModel)
         movieAdapter = MovieAdapter(movieViewModel)
@@ -149,12 +152,14 @@ class Home : AppCompatActivity() ,
     }
 
     override fun onClick(view: View?) {
+
         when(view?.id) {
            homeViewBinding.titleTv.id -> {
                 homeViewBinding.moviesRecyclerview.smoothScrollToPosition(0)
            }
-           homeViewBinding.showBookmarksBtn.id -> {
-
+            R.id.show_bookmarks_btn -> {
+                var intent = Intent(applicationContext , Bookmarks::class.java)
+                startActivity(intent)
            }
         }
     }
