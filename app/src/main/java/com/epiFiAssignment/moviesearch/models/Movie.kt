@@ -31,6 +31,7 @@ data class Movie (
     @SerializedName("Production" ) var Production    : String?            = null,
     @SerializedName("Website"    ) var Website       : String?            = null,
     @SerializedName("Response"   ) var Response      : String?            = null,
+    @SerializedName("Error"     )  var error         : String?            = null,
     var averageRating      : Int?                    = null,
     var imbdRatingValue    : String?                 = "N/A",
     var rtRating           : String?                 = "N/A",
