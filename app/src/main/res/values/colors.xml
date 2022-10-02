@@ -21,8 +21,6 @@
     <color name="movie_overlay_gradient_start_color">#73333333</color>
     <color name="movie_overlay_gradient_end_color">#00333333</color>
 
-
-
     <!-- movie details -->
     <color name="rating_star_color">#FFDF00</color>
     <color name="movie_details_background">#FFF2D5</color>
@@ -31,4 +29,5 @@
 <!--    <color name="movie_runtime_text_color">#333333</color>-->
         <color name="movie_runtime_text_color">#FFFFFF</color>
 
+    <color name="background_poster_overlay_gradient_color">#C4C4C4</color>
 </resources>

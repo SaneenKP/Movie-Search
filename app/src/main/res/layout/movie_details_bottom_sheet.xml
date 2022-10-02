@@ -43,8 +43,15 @@
                         android:scaleType="fitXY"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/movie_background_height"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:background="@color/black" />
+                        android:background="@drawable/background_poster_gradient" />
 
                     <ImageView
                         android:id="@+id/movie_image"
@@ -232,7 +239,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View
+                <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/close_btn"
                     style="?attr/buttonStyle"
                     android:background="@drawable/ic_close"

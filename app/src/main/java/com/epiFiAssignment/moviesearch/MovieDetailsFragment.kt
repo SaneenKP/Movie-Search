@@ -3,6 +3,7 @@ package com.epiFiAssignment.moviesearch
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
@@ -35,11 +36,19 @@ class MovieDetailsFragment() : BottomSheetDialogFragment() {
     }
 
     private fun init(){
-        if (fragmentActivity==null) fragmentActivity = getActivity()
+        if (fragmentActivity==null) fragmentActivity = activity
         setBottomSheetHeight()
         fragmentViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         setBottomSheetHeight()
         observeViewModel()
+
+
+        movieDetailsDetailsBottomSheetBinding.closeBtn.setOnClickListener {
+            dismiss()
+        }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
     }
 
     private fun setBottomSheetHeight(){
@@ -48,8 +57,8 @@ class MovieDetailsFragment() : BottomSheetDialogFragment() {
          layoutParams.height = (getScreenHeight()*90)/100
     }
 
-    fun getScreenHeight(): Int {
-        return Resources.getSystem().getDisplayMetrics().heightPixels
+    private fun getScreenHeight(): Int {
+        return Resources.getSystem().displayMetrics.heightPixels
     }
 
     private fun observeViewModel(){
@@ -107,5 +116,4 @@ class MovieDetailsFragment() : BottomSheetDialogFragment() {
             }
         }
     }
-
 }
