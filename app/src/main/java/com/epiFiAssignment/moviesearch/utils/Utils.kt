@@ -2,10 +2,12 @@ package com.epiFiAssignment.moviesearch.utils
 
 import android.content.Context
 import android.net.Uri
+import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.Toast
 import com.epiFiAssignment.moviesearch.BuildConfig
 import com.epiFiAssignment.moviesearch.Constants
+
 
 class Utils {
     companion object{
@@ -26,6 +28,11 @@ class Utils {
 
         fun calculateRating(rating: Double): Double {
             return (rating * 5) / 10
+        }
+
+        fun dpToPixel(context: Context , dp: Float): Float {
+            val metrics: DisplayMetrics = context.resources.getDisplayMetrics()
+            return dp * (metrics.densityDpi / 160f)
         }
 
         fun getMovieImageUrl(movieId : String) : String{

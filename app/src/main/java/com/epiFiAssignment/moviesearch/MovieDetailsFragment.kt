@@ -1,24 +1,31 @@
 package com.epiFiAssignment.moviesearch
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Context
+import android.content.res.Resources
 import android.view.LayoutInflater
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.epiFiAssignment.moviesearch.utils.Utils
-import com.epiFiAssignment.moviesearch.viewmodels.SharedViewModel
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.epiFiAssignment.moviesearch.Constants.Companion.Status
 import com.epiFiAssignment.moviesearch.databinding.MovieDetailsBottomSheetBinding
 import com.epiFiAssignment.moviesearch.models.Movie
 import com.epiFiAssignment.moviesearch.models.Ratings
+import com.epiFiAssignment.moviesearch.utils.Utils
+import com.epiFiAssignment.moviesearch.viewmodels.SharedViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.movie_details_bottom_sheet.*
 
 
-class MovieDetailsFragment : BottomSheetDialogFragment() {
+class MovieDetailsFragment() : BottomSheetDialogFragment() {
 
     lateinit var fragmentViewModel: SharedViewModel
     private var movieId : String = ""
     private var movie : Movie? = null
     lateinit var movieDetailsDetailsBottomSheetBinding : MovieDetailsBottomSheetBinding
+    private var fragmentActivity : Activity? = null
 
     override fun setupDialog(dialog: Dialog, style: Int) {
         movieDetailsDetailsBottomSheetBinding = DataBindingUtil.inflate(LayoutInflater.from(context) , R.layout.movie_details_bottom_sheet , null , false)
@@ -28,8 +35,21 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     }
 
     private fun init(){
+        if (fragmentActivity==null) fragmentActivity = getActivity()
+        setBottomSheetHeight()
         fragmentViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        setBottomSheetHeight()
         observeViewModel()
+    }
+
+    private fun setBottomSheetHeight(){
+        var nestedScrollView = movieDetailsDetailsBottomSheetBinding.bottomSheetSv
+        var layoutParams = nestedScrollView.layoutParams
+         layoutParams.height = (getScreenHeight()*90)/100
+    }
+
+    fun getScreenHeight(): Int {
+        return Resources.getSystem().getDisplayMetrics().heightPixels
     }
 
     private fun observeViewModel(){
@@ -66,16 +86,13 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
     private fun bindData(data: Movie) {
         this.movie = data
-
         configureRatings(data.Ratings)
         configureData(data)
-
         movieDetailsDetailsBottomSheetBinding.movie = this.movie
 
     }
 
     private fun configureData(data: Movie) {
-
         this.movie?.averageRating = data.imdbRating?.toDouble()
             ?.let { Utils.calculateRating(it).toInt() }
     }
