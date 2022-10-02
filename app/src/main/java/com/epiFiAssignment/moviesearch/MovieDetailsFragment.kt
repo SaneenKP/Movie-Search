@@ -75,6 +75,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     }
 
     private fun configureData(data: Movie) {
+
         this.movie?.averageRating = data.imdbRating?.toDouble()
             ?.let { Utils.calculateRating(it).toInt() }
     }
@@ -83,9 +84,9 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
         for (rating in ratings){
             when(rating.Source){
-                Constants.IMBD_RATING -> this.movie?.imbdRatingValue = rating.Value
-                Constants.ROTTEN_TOMATO_RATING -> this.movie?.rtRating = rating.Value
-                Constants.METACRITIC_RATING -> this.movie?.mtRating = rating.Value
+                Constants.IMBD_RATING -> this.movie?.imbdRatingValue =   if(rating.Value.isNullOrBlank())  "N/A" else rating.Value
+                Constants.ROTTEN_TOMATO_RATING -> this.movie?.rtRating = if(rating.Value.isNullOrBlank())  "N/A" else rating.Value
+                Constants.METACRITIC_RATING -> this.movie?.mtRating =    if(rating.Value.isNullOrBlank())  "N/A" else rating.Value
             }
         }
     }

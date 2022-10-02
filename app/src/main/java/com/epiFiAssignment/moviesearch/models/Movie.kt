@@ -1,5 +1,6 @@
 package com.epiFiAssignment.moviesearch.models
 
+import com.epiFiAssignment.moviesearch.R
 import com.google.gson.annotations.SerializedName
 
 
@@ -30,9 +31,9 @@ data class Movie (
     @SerializedName("Production" ) var Production    : String?            = null,
     @SerializedName("Website"    ) var Website       : String?            = null,
     @SerializedName("Response"   ) var Response      : String?            = null,
-    var averageRating : Int?               = null,
-    var imbdRatingValue    : String?            = null,
-    var rtRating      : String?            = null,
-    var mtRating      : String?            = null,
+    var averageRating      : Int?                    = null,
+    var imbdRatingValue    : String?                 = "N/A",
+    var rtRating           : String?                 = "N/A",
+    var mtRating           : String?                 = "N/A",
 
     )

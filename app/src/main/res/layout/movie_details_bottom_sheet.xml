@@ -251,6 +251,7 @@
                     android:textColor="@color/movie_runtime_text_color"
                     android:textStyle="italic"
                     android:layout_margin="@dimen/dp_16"
+                    android:paddingBottom="@dimen/dp_16"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/synopsis_tv"
                     app:layout_constraintEnd_toEndOf="parent" />
