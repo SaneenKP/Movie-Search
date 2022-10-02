@@ -4,15 +4,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
+import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import com.epiFiAssignment.moviesearch.Constants.Companion.Status
 import androidx.lifecycle.ViewModelProvider
 import androidx.loader.content.Loader
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.epiFiAssignment.moviesearch.adapters.LoaderAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieTypeAdapter
+import com.epiFiAssignment.moviesearch.databinding.ActivityHomeBinding
 import com.epiFiAssignment.moviesearch.models.SearchResult
 import com.epiFiAssignment.moviesearch.utils.Utils
 import com.epiFiAssignment.moviesearch.viewmodels.HomeViewModel
@@ -21,17 +25,21 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
 
 @AndroidEntryPoint
-class Home : AppCompatActivity() , SearchView.OnQueryTextListener{
+class Home : AppCompatActivity() ,
+    SearchView.OnQueryTextListener ,
+    SwipeRefreshLayout.OnRefreshListener,
+    View.OnClickListener{
 
     lateinit var movieViewModel : HomeViewModel
     lateinit var movieAdapter: MovieAdapter
     lateinit var movieTypeAdapter: MovieTypeAdapter
     private var currentMovieType = Constants.INITIAL_MOVIE_TYPE
     private var currentSearchQuery = Constants.INITIAL_MOVIE_SEARCH_QUERY
+    lateinit var homeViewBinding : ActivityHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        homeViewBinding = DataBindingUtil.setContentView(this , R.layout.activity_home)
 
         init()
     }
@@ -39,7 +47,9 @@ class Home : AppCompatActivity() , SearchView.OnQueryTextListener{
 
     private fun init(){
 
+        swipeRefresh.setOnRefreshListener(this)
         movieViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        homeViewBinding.titleTv.setOnClickListener(this)
 
         movieTypeAdapter = MovieTypeAdapter( movieViewModel)
         movieAdapter = MovieAdapter(movieViewModel)
@@ -77,6 +87,7 @@ class Home : AppCompatActivity() , SearchView.OnQueryTextListener{
     private fun observeViewModels(){
 
         movieViewModel.movieList.observe(this) {
+            if (swipeRefresh.isRefreshing) swipeRefresh.isRefreshing = false
             movieAdapter.submitData(lifecycle, it)
         }
 
@@ -131,6 +142,21 @@ class Home : AppCompatActivity() , SearchView.OnQueryTextListener{
 
     override fun onQueryTextChange(p0: String?): Boolean {
         return false
+    }
+
+    override fun onRefresh() {
+        movieAdapter.refresh()
+    }
+
+    override fun onClick(view: View?) {
+        when(view?.id) {
+           homeViewBinding.titleTv.id -> {
+                homeViewBinding.moviesRecyclerview.smoothScrollToPosition(0)
+           }
+           homeViewBinding.showBookmarksBtn.id -> {
+
+           }
+        }
     }
 
 }
