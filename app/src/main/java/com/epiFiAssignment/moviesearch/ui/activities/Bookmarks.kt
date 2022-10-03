@@ -61,4 +61,9 @@ class Bookmarks : AppCompatActivity() , View.OnClickListener {
            }
        }
     }
+
+    override fun onDestroy() {
+        this.viewModelStore.clear()
+        super.onDestroy()
+    }
 }
