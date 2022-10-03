@@ -20,4 +20,10 @@
         <item name="cornerSize">@dimen/dp_16</item>
         <item name="color">@color/app_background_color</item>
     </style>
+    
+    <style name="Theme.CustomSplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
+        <item name="postSplashScreenTheme">@style/Theme.MovieSearch</item>
+    </style>
 </resources>
