@@ -11,6 +11,11 @@ class Constants {
         const val COLUMN_COUNT = 3;
         const val IMAGE_BINDING_ADAPTER_VARIABLE = "imageFromPath"
 
+        //DB
+        const val DB_NAME  = "MovieSearchDB"
+        const val DB_VERSION  = 1
+        const val MOVIE_TABLE_NAME = "Movie"
+
         //Paging
         const val PAGE_SIZE = 10
         const val MAX_PAGE_COUNT = 100

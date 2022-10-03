@@ -1,8 +1,14 @@
 package com.epiFiAssignment.moviesearch.models
 
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import com.epiFiAssignment.moviesearch.utils.Constants
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = Constants.MOVIE_TABLE_NAME)
 data class Movie (
+    @PrimaryKey
     @SerializedName("imdbID"     ) var imdbID        : String?            = null,
     @SerializedName("Title"      ) var Title         : String?            = null,
     @SerializedName("Year"       ) var Year          : String?            = null,
@@ -18,7 +24,10 @@ data class Movie (
     @SerializedName("Country"    ) var Country       : String?            = null,
     @SerializedName("Awards"     ) var Awards        : String?            = null,
     @SerializedName("Poster"     ) var Poster        : String?            = null,
+
+    @Ignore
     @SerializedName("Ratings"    ) var Ratings       : ArrayList<Ratings> = arrayListOf(),
+
     @SerializedName("Metascore"  ) var Metascore     : String?            = null,
     @SerializedName("imdbRating" ) var imdbRating    : String?            = null,
     @SerializedName("imdbVotes"  ) var imdbVotes     : String?            = null,

@@ -185,7 +185,7 @@ class Home : AppCompatActivity() ,
 
     //handles when a movie is bookmarked.
     private fun handleMovieBookMarked(movie : Movie){
-        
+
     }
 
     private fun handleLoadingState(){
