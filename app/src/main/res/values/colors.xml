@@ -11,6 +11,7 @@
     <color name="app_title_text_color">#FFFFFFFF</color>
     <color name="app_background_color">#282828</color>
     <color name="save_icon_stroke_color">#B9B9B9</color>
+    <color name="network_connectivity_alert_color">#FFB300</color>
 
     <!-- movie view -->
     <color name="movie_type_text_color">#8D8D8D</color>
@@ -25,10 +26,8 @@
     <!-- movie details -->
     <color name="rating_star_color">#FFDF00</color>
     <color name="movie_details_background">#FFF2D5</color>
-<!--    <color name="movie_title_text_color">#282828</color>-->
     <color name="movie_title_text_color">#FFFFFF</color>
-<!--    <color name="movie_runtime_text_color">#333333</color>-->
-        <color name="movie_runtime_text_color">#FFFFFF</color>
+    <color name="movie_runtime_text_color">#FFFFFF</color>
 
     <color name="background_poster_overlay_gradient_color">#C4C4C4</color>
 </resources>

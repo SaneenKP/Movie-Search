@@ -1,11 +1,13 @@
 package com.epiFiAssignment.moviesearch.ui.activities
 
 import android.content.Intent
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,6 +20,7 @@ import com.epiFiAssignment.moviesearch.adapters.MovieAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieTypeAdapter
 import com.epiFiAssignment.moviesearch.databinding.ActivityHomeBinding
 import com.epiFiAssignment.moviesearch.ui.fragments.MovieDetailsFragment
+import com.epiFiAssignment.moviesearch.utils.ConnectionLiveStatus
 import com.epiFiAssignment.moviesearch.utils.Utils
 import com.epiFiAssignment.moviesearch.viewmodels.HomeViewModel
 import com.epiFiAssignment.moviesearch.viewmodels.SharedViewModel
@@ -39,6 +42,7 @@ class Home : AppCompatActivity() ,
     private var currentSearchQuery = Constants.DEFAULT_MOVIE_SEARCH_QUERY
     lateinit var homeViewBinding : ActivityHomeBinding
     private val FRAGMENT_TAG = "movie_details_fragment"
+    lateinit var connectivityLiveStatus: ConnectionLiveStatus
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +53,9 @@ class Home : AppCompatActivity() ,
 
 
     private fun init(){
+
+        connectivityLiveStatus = ConnectionLiveStatus(this)
+        observeConnectivity()
 
         swipeRefresh.setOnRefreshListener(this)
 
@@ -87,6 +94,18 @@ class Home : AppCompatActivity() ,
 
     }
 
+    //observe connectivity change
+    private fun observeConnectivity(){
+        connectivityLiveStatus.observe(this , Observer {status ->
+            handleConnectivityChange(status)
+        })
+    }
+
+    private fun handleConnectivityChange(status : Boolean){
+        homeViewBinding.noInternetAvailableTv.visibility = if (status) View.GONE else View.VISIBLE
+        if (status) movieAdapter.retry()
+    }
+
     //method which handles the error of paging and api calls.
     private fun handleLoadStateError(){
         movieAdapter.addLoadStateListener {loadState ->
@@ -103,9 +122,6 @@ class Home : AppCompatActivity() ,
                 }
                 is HttpException -> {
                     if (throwable.code() == 401) {
-                        handleSomethingWentWrong()
-                    }
-                    else {
                         handleSomethingWentWrong()
                     }
                 }
@@ -186,6 +202,7 @@ class Home : AppCompatActivity() ,
     //method which handles when no data is found.
     private fun handleNoDataState(){
         homeViewBinding.moviesRecyclerview.visibility = View.GONE
+        homeViewBinding.noDataAvailableView.noDataAvailableTv.text = applicationContext.resources.getString(R.string.no_data_available_string) + " For " + currentSearchQuery + " in " + currentMovieType
         no_data_available_view.visibility = View.VISIBLE
     }
 
@@ -197,7 +214,6 @@ class Home : AppCompatActivity() ,
 
     //function when a search query is submitted.
     override fun onQueryTextSubmit(searchQuery: String?): Boolean {
-        Utils.toast(this , "${searchQuery}")
         if (searchQuery != null) {
             this.currentSearchQuery = searchQuery
             searchMovie(currentSearchQuery , currentMovieType)
