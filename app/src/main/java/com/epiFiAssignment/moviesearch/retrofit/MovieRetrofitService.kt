@@ -1,14 +1,13 @@
 package com.epiFiAssignment.moviesearch.retrofit
 
 import com.epiFiAssignment.moviesearch.BuildConfig
-import com.epiFiAssignment.moviesearch.Constants
+import com.epiFiAssignment.moviesearch.utils.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -57,12 +56,12 @@ class MovieRetrofitService @Inject constructor() {
          * Only use the logging interceptor to log , Do not use it in production.
          * This can cause a serious security issue and google play might reject it.
          */
-        var httLog : HttpLoggingInterceptor = HttpLoggingInterceptor()
-        httLog.setLevel(HttpLoggingInterceptor.Level.BODY)
+//        var httLog : HttpLoggingInterceptor = HttpLoggingInterceptor()
+//        httLog.setLevel(HttpLoggingInterceptor.Level.BODY)
 
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(getInterceptor())
-            .addInterceptor(httLog)
+//            .addInterceptor(httLog)
             .connectTimeout(Constants.connectionTimeOutSeconds , TimeUnit.SECONDS)
             .build()
 

@@ -10,6 +10,9 @@ import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.epiFiAssignment.moviesearch.R
 
+/**
+ * Loader Adapter used to showing loader during pagination
+ */
 class LoaderAdapter : LoadStateAdapter<LoaderAdapter.LoaderHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoaderHolder {

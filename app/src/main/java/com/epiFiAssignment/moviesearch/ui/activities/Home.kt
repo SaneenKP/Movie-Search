@@ -1,4 +1,4 @@
-package com.epiFiAssignment.moviesearch
+package com.epiFiAssignment.moviesearch.ui.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +11,13 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.epiFiAssignment.moviesearch.utils.Constants
+import com.epiFiAssignment.moviesearch.R
 import com.epiFiAssignment.moviesearch.adapters.LoaderAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieTypeAdapter
 import com.epiFiAssignment.moviesearch.databinding.ActivityHomeBinding
+import com.epiFiAssignment.moviesearch.ui.fragments.MovieDetailsFragment
 import com.epiFiAssignment.moviesearch.utils.Utils
 import com.epiFiAssignment.moviesearch.viewmodels.HomeViewModel
 import com.epiFiAssignment.moviesearch.viewmodels.SharedViewModel
@@ -48,15 +51,21 @@ class Home : AppCompatActivity() ,
     private fun init(){
 
         swipeRefresh.setOnRefreshListener(this)
+
+        //initialise view models.
         movieViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
+        //set listeners.
         homeViewBinding.titleTv.setOnClickListener(this)
         homeViewBinding.showBookmarksBtn.setOnClickListener(this)
+        homeViewBinding.movieSearch.setOnQueryTextListener(this)
 
+        //Initialise Adapters.
         movieTypeAdapter = MovieTypeAdapter( movieViewModel)
         movieAdapter = MovieAdapter(movieViewModel)
         handleLoadStateError()
 
+        //Initialise RecyclerViews.
         movies_recyclerview.apply {
             layoutManager = GridLayoutManager(context , Constants.COLUMN_COUNT)
             setHasFixedSize(true)
@@ -64,20 +73,21 @@ class Home : AppCompatActivity() ,
                 footer = LoaderAdapter()
             )
         }
-
         movie_types_recyclerview.apply {
             layoutManager = LinearLayoutManager(context , LinearLayoutManager.HORIZONTAL , false)
             setHasFixedSize(true)
             adapter = movieTypeAdapter
         }
 
-        movie_search.setOnQueryTextListener(this)
+        //Initial search for the movies with the default searchQuery and Default MovieType
         searchMovie(currentSearchQuery , currentMovieType)
 
+        //Observe ViewModels.
         observeViewModels()
 
     }
 
+    //method which handles the error of paging and api calls.
     private fun handleLoadStateError(){
         movieAdapter.addLoadStateListener {loadState ->
             val errorState = when {
@@ -111,12 +121,15 @@ class Home : AppCompatActivity() ,
         }
     }
 
+    //Searches movies by making api call through view model.
+    //Before that it removes all the Utility views which was displayed due to some error.
     private fun searchMovie(searchQuery : String , movieType : String){
         removeVisibilityOfAllUtilityView()
         homeViewBinding.moviesRecyclerview.visibility = View.VISIBLE
         movieViewModel.searchMovie(searchQuery , movieType)
     }
 
+    //all view model Observers
     private fun observeViewModels(){
 
         movieViewModel.movieList.observe(this) {
@@ -138,11 +151,13 @@ class Home : AppCompatActivity() ,
 
     }
 
+    //searches movie when movie type changes with the respective movie type.
     private fun handleMovieTypeChange(movieType: String) {
         this.currentMovieType = movieType
         searchMovie(currentSearchQuery , currentMovieType)
     }
 
+    //Opens the movie details fragment when a movie is clicked.
     private fun handleOnMovieClicked(movieId: String) {
         var movieDetailsFragment : MovieDetailsFragment = MovieDetailsFragment()
         movieDetailsFragment.show(supportFragmentManager , FRAGMENT_TAG)
@@ -151,6 +166,7 @@ class Home : AppCompatActivity() ,
         fragmentViewModel.getMovieId().value = movieId
     }
 
+    //handles when a movie is bookmarked.
     private fun handleMovieBookMarked(movieId : String){
         Utils.toast(this , "Bookmarked")
     }
@@ -161,21 +177,25 @@ class Home : AppCompatActivity() ,
     private fun handleNetworkError(){
     }
 
+    //methods which handles when something went wrong condition triggers.
     private fun handleSomethingWentWrong(){
        homeViewBinding.moviesRecyclerview.visibility = View.GONE
         something_went_wrong_view.visibility = View.VISIBLE
     }
 
+    //method which handles when no data is found.
     private fun handleNoDataState(){
         homeViewBinding.moviesRecyclerview.visibility = View.GONE
         no_data_available_view.visibility = View.VISIBLE
     }
 
+    //Removes visibility of all utility views.
     private fun removeVisibilityOfAllUtilityView(){
         no_data_available_view.visibility = View.GONE
         something_went_wrong_view.visibility = View.GONE
     }
 
+    //function when a search query is submitted.
     override fun onQueryTextSubmit(searchQuery: String?): Boolean {
         Utils.toast(this , "${searchQuery}")
         if (searchQuery != null) {
@@ -189,6 +209,7 @@ class Home : AppCompatActivity() ,
         return false
     }
 
+    //during swipe refresh
     override fun onRefresh() {
         movieAdapter.refresh()
     }
@@ -196,6 +217,7 @@ class Home : AppCompatActivity() ,
     override fun onClick(view: View?) {
 
         when(view?.id) {
+            //on clicking the app name , the recyclerview will scroll to the top.
            homeViewBinding.titleTv.id -> {
                 homeViewBinding.moviesRecyclerview.smoothScrollToPosition(0)
            }
@@ -205,5 +227,4 @@ class Home : AppCompatActivity() ,
            }
         }
     }
-
 }

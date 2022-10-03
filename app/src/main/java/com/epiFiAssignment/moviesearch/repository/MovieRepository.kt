@@ -1,6 +1,6 @@
 package com.epiFiAssignment.moviesearch.repository
 
-import com.epiFiAssignment.moviesearch.Constants
+import com.epiFiAssignment.moviesearch.utils.Constants
 import com.epiFiAssignment.moviesearch.models.Movie
 import com.epiFiAssignment.moviesearch.models.SearchResult
 import com.epiFiAssignment.moviesearch.retrofit.MovieNetworkClient

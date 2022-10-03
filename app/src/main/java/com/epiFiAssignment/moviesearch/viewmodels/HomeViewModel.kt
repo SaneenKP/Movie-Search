@@ -6,18 +6,34 @@ import com.epiFiAssignment.moviesearch.utils.MergedMovieTypeAndQueryStringLiveDa
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+/**
+ * The main view model used by the home screen.
+ */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val moviePagingRepository: MoviePagingRepository,
 ) : ViewModel(){
 
+    //Holds the state of the movieType buttons ie if clicked or not
     private val movieTypeClickState = mutableListOf<Boolean>(true , false , false , false)
+
+    //Triggers when movie type gets changed. Sends the changed movie type.
     private val changeMovieType : MutableLiveData<String> = MutableLiveData()
+
+    //Triggers when a movie is selected.
     private val movieSelected : MutableLiveData<String> = MutableLiveData()
+
+    //Triggers when a movie is bookmarked.
     private val bookMarked : MutableLiveData<String> = MutableLiveData()
+
+    //Holds the movie type data.
     private val movieType : MutableLiveData<String> = MutableLiveData()
+
+    //Triggers when user searches something.
     private val searchQuery : MutableLiveData<String> = MutableLiveData()
 
+    //This is triggered when any of the two searchQuery or MovieType is triggered.
+    //The mediatorLiveData class merges the two data.
     val movieList = Transformations.switchMap(MergedMovieTypeAndQueryStringLiveData(searchQuery , movieType)){
         it?.second?.let { it1 -> it.first?.let { it2 -> moviePagingRepository.getMovies(searchQuery = it2, movieType = it1) } }
     }
@@ -26,6 +42,7 @@ class HomeViewModel @Inject constructor(
         return this.movieTypeClickState
     }
 
+    //changes the click state of all the other movie type buttons to false.
     fun setClickState(pos : Int , status : Boolean){
         this.movieTypeClickState[pos] = status
         movieTypeClickState.forEachIndexed { index: Int, b: Boolean ->

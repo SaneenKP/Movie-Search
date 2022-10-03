@@ -2,12 +2,15 @@ package com.epiFiAssignment.moviesearch.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.epiFiAssignment.moviesearch.Constants
+import com.epiFiAssignment.moviesearch.utils.Constants
 import com.epiFiAssignment.moviesearch.models.Movie
 import com.epiFiAssignment.moviesearch.repository.MovieRepository
-import com.epiFiAssignment.moviesearch.Constants.Companion.Status
+import com.epiFiAssignment.moviesearch.utils.Constants.Companion.Status
 import java.io.IOException
 
+/**
+    paging source which loads the data for pagination.
+ */
 class MoviePagingSource(
     private val searchQuery: String,
     private val searchType : String,

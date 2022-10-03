@@ -1,5 +1,5 @@
 package com.epiFiAssignment.moviesearch.retrofit
-import com.epiFiAssignment.moviesearch.Constants.Companion.Status
+import com.epiFiAssignment.moviesearch.utils.Constants.Companion.Status
 
 /**
  * A simple wrapper class to hold the state of response obtained from api calls.

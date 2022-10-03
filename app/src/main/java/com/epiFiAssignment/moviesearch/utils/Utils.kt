@@ -6,7 +6,6 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.Toast
 import com.epiFiAssignment.moviesearch.BuildConfig
-import com.epiFiAssignment.moviesearch.Constants
 
 
 class Utils {

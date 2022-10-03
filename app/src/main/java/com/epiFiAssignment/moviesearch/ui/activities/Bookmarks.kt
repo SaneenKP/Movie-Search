@@ -1,12 +1,17 @@
-package com.epiFiAssignment.moviesearch
+package com.epiFiAssignment.moviesearch.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
+import com.epiFiAssignment.moviesearch.utils.Constants
+import com.epiFiAssignment.moviesearch.R
 import com.epiFiAssignment.moviesearch.databinding.ActivityBookmarksBinding
 
+/**
+ * Activity which holds the bookmarks
+ */
 class Bookmarks : AppCompatActivity() , View.OnClickListener {
 
     private lateinit var bookmarksBinding: ActivityBookmarksBinding

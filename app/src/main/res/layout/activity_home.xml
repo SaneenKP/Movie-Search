@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="@color/app_background_color"
         android:orientation="vertical"
-        tools:context=".Home">
+        tools:context=".ui.activities.Home">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"

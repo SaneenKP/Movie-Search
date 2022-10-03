@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epiFiAssignment.moviesearch.databinding.ActivityBookmarksBinding
 import com.epiFiAssignment.moviesearch.models.Movie
 
+/**
+ * Adapter used to display movies in the book mark section.
+ */
 class BookmarksAdapter(
     var movieList : ArrayList<Movie>
 ) : RecyclerView.Adapter<BookmarksAdapter.BookmarksViewHolder>() {

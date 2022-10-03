@@ -1,4 +1,4 @@
-package com.epiFiAssignment.moviesearch
+package com.epiFiAssignment.moviesearch.utils
 class Constants {
 
     companion object {
@@ -35,8 +35,11 @@ class Constants {
         private const val TYPE_EPISODE_TEXT = "Episode"
         private const val TYPE_HOME_TEXT = "Home"
 
-        val movieTypes = listOf<String>(TYPE_HOME,TYPE_MOVIE , TYPE_SERIES , TYPE_EPISODE)
-        val movieTypeTexts = listOf<String>(TYPE_HOME_TEXT,TYPE_MOVIE_TEXT , TYPE_SERIES_TEXT , TYPE_EPISODE_TEXT)
+        val movieTypes = listOf<String>(TYPE_HOME, TYPE_MOVIE , TYPE_SERIES , TYPE_EPISODE)
+        val movieTypeTexts = listOf<String>(
+            TYPE_HOME_TEXT,
+            TYPE_MOVIE_TEXT , TYPE_SERIES_TEXT , TYPE_EPISODE_TEXT
+        )
 
         //API Query Params
         const val API_KEY_QUERY = "apikey"

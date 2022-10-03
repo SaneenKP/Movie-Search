@@ -1,11 +1,8 @@
 package com.epiFiAssignment.moviesearch.models
 
-import com.epiFiAssignment.moviesearch.R
 import com.google.gson.annotations.SerializedName
 
-
 data class Movie (
-
     @SerializedName("imdbID"     ) var imdbID        : String?            = null,
     @SerializedName("Title"      ) var Title         : String?            = null,
     @SerializedName("Year"       ) var Year          : String?            = null,
@@ -32,9 +29,8 @@ data class Movie (
     @SerializedName("Website"    ) var Website       : String?            = null,
     @SerializedName("Response"   ) var Response      : String?            = null,
     @SerializedName("Error"     )  var error         : String?            = null,
-    var averageRating      : Double?,
-    var imbdRatingValue    : String?                 = null,
-    var rtRating           : String?                 = null,
-    var mtRating           : String?                 = null,
-
+                                   var averageRating      : Double?,
+                                   var imbdRatingValue    : String?       = null,
+                                   var rtRating           : String?       = null,
+                                   var mtRating           : String?       = null,
     )
