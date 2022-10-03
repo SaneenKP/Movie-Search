@@ -20,6 +20,9 @@ class HomeViewModel @Inject constructor(
     private val movieSearchDatabase: MovieSearchDatabase
 ) : ViewModel(){
 
+
+    private var movieIdList : MutableLiveData<List<String>> = MutableLiveData()
+
     //Holds the state of the movieType buttons ie if clicked or not
     private val movieTypeClickState = mutableListOf<Boolean>(true , false , false , false)
 
@@ -37,6 +40,10 @@ class HomeViewModel @Inject constructor(
 
     //Triggers when user searches something.
     private val searchQuery : MutableLiveData<String> = MutableLiveData()
+
+    init {
+        populateBookmarkedMovies()
+    }
 
     //This is triggered when any of the two searchQuery or MovieType is triggered.
     //The mediatorLiveData class merges the two data.
@@ -96,5 +103,20 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             movieSearchDatabase.movieDao().deleteMovie(movieId)
         }
+    }
+
+    private fun populateBookmarkedMovies(){
+        viewModelScope.launch {
+            movieIdList.value = movieSearchDatabase.movieDao().getMovieKeys()
+        }
+    }
+
+    fun checkBookmarkedMovieOrNot(imbdId : String) : Boolean{
+        if (movieIdList.value != null){
+            for (id in movieIdList.value!!){
+                if (id == imbdId) return true
+            }
+        }
+        return false
     }
 }

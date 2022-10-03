@@ -32,7 +32,18 @@ class MovieAdapter(
 
         fun bindData(movie: Movie){
             this.movie = movie
+            this.movie!!.bookmarkStatus = getBookmarkedOrNotStatus(movie)
+            setBookMarkStatus(this.movie!!.bookmarkStatus)
             movieDataBinding.movie = movie
+        }
+
+        private fun getBookmarkedOrNotStatus(movie: Movie) : Boolean{
+            return movieViewModel.checkBookmarkedMovieOrNot(movie.imdbID!!)
+        }
+
+        fun setBookMarkStatus(status : Boolean){
+            if (status) movieDataBinding.bookmark.background = movieDataBinding.root.context.resources.getDrawable(R.drawable.bookmark_saved_icon)
+            else movieDataBinding.bookmark.background = movieDataBinding.root.context.resources.getDrawable(R.drawable.bookmark_icon)
         }
 
         fun changeBookmarkStatus(){
