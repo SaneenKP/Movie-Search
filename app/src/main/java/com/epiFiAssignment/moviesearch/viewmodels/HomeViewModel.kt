@@ -1,10 +1,14 @@
 package com.epiFiAssignment.moviesearch.viewmodels
 
 import androidx.lifecycle.*
+import com.epiFiAssignment.moviesearch.db.MovieSearchDatabase
 import com.epiFiAssignment.moviesearch.models.Movie
+import com.epiFiAssignment.moviesearch.models.RoomMovieData
 import com.epiFiAssignment.moviesearch.repository.MoviePagingRepository
 import com.epiFiAssignment.moviesearch.utils.MergedMovieTypeAndQueryStringLiveData
+import com.epiFiAssignment.moviesearch.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -13,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val moviePagingRepository: MoviePagingRepository,
+    private val movieSearchDatabase: MovieSearchDatabase
 ) : ViewModel(){
 
     //Holds the state of the movieType buttons ie if clicked or not
@@ -77,5 +82,19 @@ class HomeViewModel @Inject constructor(
     fun searchMovie(searchQuery: String , movieType: String){
         setSearchQuery(searchQuery = searchQuery)
         setMovieType(movieType = movieType)
+    }
+
+    fun addMovieToDatabase(movie: Movie){
+        viewModelScope.launch {
+            movieSearchDatabase.movieDao().addMovies(
+                RoomMovieData(0, movie.imdbID, movie.Title, movie.Type)
+            )
+        }
+    }
+
+    fun removeMovieFromDatabase(movieId : String){
+        viewModelScope.launch {
+            movieSearchDatabase.movieDao().deleteMovie(movieId)
+        }
     }
 }

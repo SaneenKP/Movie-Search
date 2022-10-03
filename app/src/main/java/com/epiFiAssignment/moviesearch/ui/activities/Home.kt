@@ -185,7 +185,9 @@ class Home : AppCompatActivity() ,
 
     //handles when a movie is bookmarked.
     private fun handleMovieBookMarked(movie : Movie){
-
+        Utils.toast(context = this , "Bookmarked")
+        if (movie.bookmarkStatus) movieViewModel.addMovieToDatabase(movie)
+        else movieViewModel.removeMovieFromDatabase(movie.imdbID!!)
     }
 
     private fun handleLoadingState(){
