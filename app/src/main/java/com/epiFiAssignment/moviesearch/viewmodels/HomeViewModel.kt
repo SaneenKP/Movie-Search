@@ -3,10 +3,9 @@ package com.epiFiAssignment.moviesearch.viewmodels
 import androidx.lifecycle.*
 import com.epiFiAssignment.moviesearch.db.MovieSearchDatabase
 import com.epiFiAssignment.moviesearch.models.Movie
-import com.epiFiAssignment.moviesearch.models.RoomMovieData
+import com.epiFiAssignment.moviesearch.models.BookmarkMovieData
 import com.epiFiAssignment.moviesearch.repository.MoviePagingRepository
 import com.epiFiAssignment.moviesearch.utils.MergedMovieTypeAndQueryStringLiveData
-import com.epiFiAssignment.moviesearch.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -94,7 +93,7 @@ class HomeViewModel @Inject constructor(
     fun addMovieToDatabase(movie: Movie){
         viewModelScope.launch {
             movieSearchDatabase.movieDao().addMovies(
-                RoomMovieData(0, movie.imdbID, movie.Title, movie.Type)
+                BookmarkMovieData(0, movie.imdbID, movie.Title, movie.Type , movie.Poster)
             )
         }
     }
