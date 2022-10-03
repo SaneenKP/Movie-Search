@@ -33,4 +33,5 @@ data class Movie (
                                    var imbdRatingValue    : String?       = null,
                                    var rtRating           : String?       = null,
                                    var mtRating           : String?       = null,
-    )
+                                   var bookmarkStatus     : Boolean       = false,
+)

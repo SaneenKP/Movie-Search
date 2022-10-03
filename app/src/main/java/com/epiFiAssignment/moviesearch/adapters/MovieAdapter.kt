@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.epiFiAssignment.moviesearch.R
 import com.epiFiAssignment.moviesearch.databinding.MovieViewBinding
 import com.epiFiAssignment.moviesearch.models.Movie
 import com.epiFiAssignment.moviesearch.viewmodels.HomeViewModel
@@ -34,10 +35,21 @@ class MovieAdapter(
             movieDataBinding.movie = movie
         }
 
+        fun changeBookmarkStatus(){
+            if (this.movie!!.bookmarkStatus){
+               this.movie!!.bookmarkStatus = false
+               movieDataBinding.bookmark.background = movieDataBinding.root.context.resources.getDrawable(R.drawable.bookmark_icon)
+            }else{
+                this.movie!!.bookmarkStatus = true
+                movieDataBinding.bookmark.background = movieDataBinding.root.context.resources.getDrawable(R.drawable.bookmark_saved_icon)
+            }
+        }
+
         override fun onClick(p0: View?) {
             when(p0?.id){
                 movieDataBinding.bookmark.id -> {
-                    movieViewModel.getMovieBookmarked().value = this.movie?.imdbID
+                    changeBookmarkStatus()
+                    movieViewModel.getMovieBookmarked().value = this.movie
                 }
                 movieDataBinding.root.id -> {
                     movieViewModel.getMovieSelected().value = this.movie?.imdbID

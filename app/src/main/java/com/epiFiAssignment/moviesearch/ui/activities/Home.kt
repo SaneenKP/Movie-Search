@@ -19,6 +19,7 @@ import com.epiFiAssignment.moviesearch.adapters.LoaderAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieAdapter
 import com.epiFiAssignment.moviesearch.adapters.MovieTypeAdapter
 import com.epiFiAssignment.moviesearch.databinding.ActivityHomeBinding
+import com.epiFiAssignment.moviesearch.models.Movie
 import com.epiFiAssignment.moviesearch.ui.fragments.MovieDetailsFragment
 import com.epiFiAssignment.moviesearch.utils.ConnectionLiveStatus
 import com.epiFiAssignment.moviesearch.utils.Utils
@@ -157,8 +158,8 @@ class Home : AppCompatActivity() ,
             handleMovieTypeChange(movieType)
         }
 
-        movieViewModel.getMovieBookmarked().observe(this) { movieId ->
-            handleMovieBookMarked(movieId)
+        movieViewModel.getMovieBookmarked().observe(this) { movie ->
+            handleMovieBookMarked(movie)
         }
 
         movieViewModel.getMovieSelected().observe(this) { movieId ->
@@ -183,8 +184,8 @@ class Home : AppCompatActivity() ,
     }
 
     //handles when a movie is bookmarked.
-    private fun handleMovieBookMarked(movieId : String){
-        Utils.toast(this , "Bookmarked")
+    private fun handleMovieBookMarked(movie : Movie){
+        
     }
 
     private fun handleLoadingState(){

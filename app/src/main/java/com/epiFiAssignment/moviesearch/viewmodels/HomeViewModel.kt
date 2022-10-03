@@ -1,6 +1,7 @@
 package com.epiFiAssignment.moviesearch.viewmodels
 
 import androidx.lifecycle.*
+import com.epiFiAssignment.moviesearch.models.Movie
 import com.epiFiAssignment.moviesearch.repository.MoviePagingRepository
 import com.epiFiAssignment.moviesearch.utils.MergedMovieTypeAndQueryStringLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +25,7 @@ class HomeViewModel @Inject constructor(
     private val movieSelected : MutableLiveData<String> = MutableLiveData()
 
     //Triggers when a movie is bookmarked.
-    private val bookMarked : MutableLiveData<String> = MutableLiveData()
+    private val bookMarked : MutableLiveData<Movie> = MutableLiveData()
 
     //Holds the movie type data.
     private val movieType : MutableLiveData<String> = MutableLiveData()
@@ -50,7 +51,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getMovieBookmarked() : MutableLiveData<String> {
+    fun getMovieBookmarked() : MutableLiveData<Movie> {
        return this.bookMarked
     }
 
